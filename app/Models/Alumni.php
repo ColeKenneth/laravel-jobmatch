@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Override;
 
 class Alumni extends Model
@@ -40,5 +41,15 @@ class Alumni extends Model
     public function user() : BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function employmentHistories() : HasMany
+    {
+        return $this->hasMany(EmploymentHistory::class);
+    }
+
+    public function skills() : HasMany
+    {
+        return $this->hasMany(Skill::class);
     }
 }

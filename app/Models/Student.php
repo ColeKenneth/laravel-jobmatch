@@ -6,6 +6,7 @@ use App\Enum\YearLevel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Student extends Model
 {
@@ -34,5 +35,15 @@ class Student extends Model
     public function user() : BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function studentSkills() : HasMany
+    {
+        return $this->hasMany(StudentSkill::class);
+    }
+
+    public function placementRecords() : HasMany
+    {
+        return $this->hasMany(PlacementRecord::class);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Override;
 
 class Certification extends Model
@@ -27,5 +28,10 @@ class Certification extends Model
             'date_issued' => 'datetime',
             'expiry_date' => 'datetime',
         ];
+    }
+
+    public function student() : BelongsTo
+    {
+        return $this->belongsTo(Student::class);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Override;
 
 class EmploymentHistory extends Model
@@ -28,5 +29,10 @@ class EmploymentHistory extends Model
             'end_date' => 'date',
             'is_current' => 'boolean'
         ];
+    }
+
+    public function alumni() : BelongsTo
+    {
+        return $this->belongsTo(Alumni::class);
     }
 }
