@@ -27,8 +27,6 @@ class JobPosting extends Model
         'posted_date',
         'deadline',
         'is_active',
-        'views',
-        'applications'
     ];
 
     #[Override]
