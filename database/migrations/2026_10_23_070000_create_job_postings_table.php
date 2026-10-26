@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('requirements', 150);
             $table->string('preferred_skills', 150)->nullable();
             $table->integer('min_experience_years');
-            $table->decimal('min_salary', 9, 2);
-            $table->decimal('max_salary', 9, 2);
+            $table->decimal('min_salary', 9, 2)->nullable();
+            $table->decimal('max_salary', 9, 2)->nullable();
             $table->string('location', 100);
             $table->string('employment_type', 20);
             $table->dateTime('posted_date');

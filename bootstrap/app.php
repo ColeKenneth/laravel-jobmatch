@@ -1,5 +1,8 @@
 <?php
 
+use App\Exceptions\AlreadyExistsException;
+use App\Exceptions\BusinessRuleException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -19,4 +22,22 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->shouldRenderJsonWhen(
             fn (Request $request) => $request->is('api/*') || $request->expectsJson(),
         );
+
+        $exceptions->render(function (ModelNotFoundException $e, Request $request) {
+            if ($request->is('api/**')) {
+                return response()->json(['message' => 'Resource not found.'], $e->getCode());
+            }
+        });
+
+        $exceptions->render(function (BusinessRuleException $e, Request $request) {
+            if ($request->is('api/**')) {
+                return response()->json(['message' => $e->getMessage()], $e->getCode());
+            }
+        });
+
+        $exceptions->render(function (AlreadyExistsException $e, Request $request)  {
+            if ($request->is('api/**')) {
+                return response()->json(['message' => $e->getMessage()], $e->getCode());
+            }
+        });
     })->create();
