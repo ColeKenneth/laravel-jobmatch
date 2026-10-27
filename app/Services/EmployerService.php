@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Services;
 
@@ -39,7 +40,7 @@ final class EmployerService
     {
         $employer = Employer::findOrFail($id);
 
-        if (!empty($data['user_id']) && $data['user_id'] !== $employer->user_id) {
+        if (!empty($data['user_id']) && (int)$data['user_id'] !== (int)$employer->user_id) {
             throw new BusinessRuleException("Cannot reassign employer to a different user.");
         }
 

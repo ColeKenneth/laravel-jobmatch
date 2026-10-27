@@ -1,9 +1,9 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Services;
 
 use App\Exceptions\AlreadyExistsException;
-use App\Exceptions\BusinessRuleException;
 use App\Models\JobPosting;
 use App\Models\JobSkill;
 use App\Models\Skill;

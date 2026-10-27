@@ -14,15 +14,15 @@ return new class extends Migration
         Schema::create('job_postings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('employer_id')->constrained()->onDelete('cascade');
-            $table->string('title', 50);
+            $table->string('title', 150);
             $table->text('description');
-            $table->string('requirements', 150);
-            $table->string('preferred_skills', 150)->nullable();
+            $table->text('requirements');
+            $table->text('preferred_skills')->nullable();
             $table->integer('min_experience_years');
             $table->decimal('min_salary', 9, 2)->nullable();
             $table->decimal('max_salary', 9, 2)->nullable();
             $table->string('location', 100);
-            $table->string('employment_type', 20);
+            $table->string('employment_type', 30);
             $table->dateTime('posted_date');
             $table->dateTime('deadline')->nullable();
             $table->boolean('is_active')->default(true);

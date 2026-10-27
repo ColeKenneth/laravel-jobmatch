@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Services;
 
@@ -13,7 +14,7 @@ final class CertificationService
 {
     public function create(array $data) : Certification
     {
-        $student = Student::findorFail($data['student_id']);
+        $student = Student::findOrFail($data['student_id']);
 
         $issued = Carbon::parse($data['date_issued']);
         $expiry = isset($data['expiry_date']) ? Carbon::parse($data['expiry_date']) : null;
@@ -50,7 +51,7 @@ final class CertificationService
             throw new BusinessRuleException("Expiry date must be after the issued date.");
         }
 
-        if (!empty($data['student_id']) && $data['student_id'] !== $certification->student_id) {
+        if (!empty($data['student_id']) && (int)$data['student_id'] !== (int)$certification->student_id) {
             throw new BusinessRuleException("Cannot reassign a certification to another student.");
         }
 
@@ -73,7 +74,6 @@ final class CertificationService
     public function delete(int $id) : void
     {
         $certification = Certification::findOrFail($id);
-
         $certification->delete();
 
         Log::info("Deleted certification", ['id' => $id]);

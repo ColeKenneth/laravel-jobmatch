@@ -43,7 +43,7 @@ final class AlumniService
     {
         $alumni = Alumni::findOrFail($id);
 
-        if (!empty($data['user_id']) && $data['user_id'] !== $alumni->user_id) {
+        if (!empty($data['user_id']) && (int)$data['user_id'] !== (int)$alumni->user_id) {
             throw new BusinessRuleException("Cannot reassign alumni profile to a different user.");
         }
 
@@ -64,7 +64,6 @@ final class AlumniService
     public function delete(int $id) : void
     {
         $alumni = Alumni::findOrFail($id);
-
         $alumni->delete();
 
         Log::info("Deleted alumni profile", ['id' => $id]);
@@ -78,7 +77,7 @@ final class AlumniService
     public function getAll() : Collection
     {
         return Alumni::with('user')
-                    ->latest('graduation_date')
-                    ->get();
+            ->latest('graduation_date')
+            ->get();
     }
 }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Services;
 
@@ -32,9 +33,8 @@ final class EmploymentHistoryService
 
    public function create(array $data) : EmploymentHistory
    {
-       $alumni = Alumni::findOrFail($data['alumni_id']);
-
        $this->validateEmploymentDates($data);
+       $alumni = Alumni::findOrFail($data['alumni_id']);
 
        $attributes = [
            'alumni_id' => $data['alumni_id'],

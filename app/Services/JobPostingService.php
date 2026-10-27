@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Services;
 
@@ -12,13 +13,16 @@ use Illuminate\Support\Facades\Log;
 
 final class JobPostingService
 {
-   private function validateRules(array $data) : void
+   private function validateRules(array $data, ?JobPosting $jobPosting) : void
    {
-       if (isset($data['min_salary']) && isset($data['max_salary']) && $data['min_salary'] > $data['max_salary']) {
+       $minSalary = array_key_exists('min_salary', $data) ? $data['min_salary'] : $jobPosting?->min_salary;
+       $maxSalary = array_key_exists('max_salary', $data) ? $data['max_salary'] : $jobPosting->max_salary;
+
+       if ($minSalary !== null && $maxSalary !== null && (float) $minSalary > (float) $maxSalary) {
            throw new BusinessRuleException("Minimum salary cannot be greater than the maximum salary.");
        }
 
-       if (isset($data['deadline']) && Carbon::parse($data['deadline'])->isPast()) {
+       if (array_key_exists('deadline', $data) && $data['deadline'] !== null && Carbon::parse($data['deadline'])->isPast()) {
            throw new BusinessRuleException("Deadline must be in the future.");
        }
    }
@@ -66,38 +70,30 @@ final class JobPostingService
 
    private function toggleStatus(int $id, bool $isActive, string $action) : void
    {
-       $updatedCount = (int) JobPosting::where('id', $id)->update(['is_active' => $isActive]);
+       $jobPosting = JobPosting::findOrFail($id);
 
-       if ($updatedCount === 0) {
-           throw new ModelNotFoundException()->setModel(JobPosting::class);
-       }
+       $jobPosting->is_active = $isActive;
+       $jobPosting->save();
 
-       Log::info("{$action} job posting", ['id' => $id]);
+       Log::info("{$action} job posting", ['id' => $jobPosting->id]);
    }
 
    public function incrementViews(int $id) : void
    {
-       $updatedCount = (int) JobPosting::where('id', $id)->increment('views');
-
-       if ($updatedCount === 0) {
-           throw new ModelNotFoundException()->setModel(JobPosting::class);
-       }
+       $jobPosting = JobPosting::findOrFail($id);
+       $jobPosting->increment('views');
    }
 
    public function incrementApplications(int $id) : void
    {
-       $updatedCount = (int) JobPosting::where('id', $id)->increment('applications');
-
-       if ($updatedCount === 0) {
-           throw new ModelNotFoundException()->setModel(JobPosting::class);
-       }
+       $jobPosting = JobPosting::findOrFail($id);
+       $jobPosting->increment('applications');
    }
 
    public function update(int $id, array $data) : JobPosting
    {
-       $this->validateRules($data);
-
        $jobPosting = JobPosting::findOrFail($id);
+       $this->validateRules($data, $jobPosting);
 
        $jobPosting->fill([
            'title' => trim($data['title']),
@@ -148,7 +144,7 @@ final class JobPostingService
        $query = $location
            |> trim(...)
            |> strtolower(...)
-           |> (fn($x) => JobPosting::whereRaw('LOWER(location) = :location', [$x]));
+           |> (fn($x) => JobPosting::whereRaw('LOWER(location) = ?', [$x]));
 
        return $query->latest('posted_date')->get();
    }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Services;
 
@@ -22,9 +23,8 @@ final class InternshipService
     }
     public function create(array $data) : Internship
     {
-        $student = Student::findOrFail($data['student_id']);
-
         $this->validateDates($data);
+        $student = Student::findOrFail($data['student_id']);
 
         $attributes = [
             'student_id' => $data['student_id'],
@@ -83,7 +83,7 @@ final class InternshipService
 
         $internship = Internship::findOrFail($id);
 
-        if (!empty($data['student_id']) && $data['student_id'] !== $internship->student_id) {
+        if (!empty($data['student_id']) && (int)$data['student_id'] !== (int)$internship->student_id) {
             throw new BusinessRuleException("Cannot reassign internship to a different student.");
         }
 
