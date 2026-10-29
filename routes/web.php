@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\AlumniList;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -14,4 +15,8 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+});
+
+Route::middleware(['role:admin'])->prefix('admin')->group(function () {
+    Route::get('/alumni', AlumniList::class)->name('admin.alumni');
 });

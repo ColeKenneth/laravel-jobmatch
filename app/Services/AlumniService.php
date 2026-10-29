@@ -7,6 +7,7 @@ use App\Exceptions\AlreadyExistsException;
 use App\Exceptions\BusinessRuleException;
 use App\Models\Alumni;
 use App\Models\User;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
@@ -74,10 +75,19 @@ final class AlumniService
         return Alumni::with('user')->findOrFail($id);
     }
 
-    public function getAll() : Collection
+    public function getAll(?string $search = null): LengthAwarePaginator
     {
-        return Alumni::with('user')
-            ->latest('graduation_date')
-            ->get();
+        return Alumni::query()
+            ->with('user')
+            ->when($search, function ($query, $search) {
+                $query->whereHas('user', function ($q) use ($search) {
+                    $q->where('first_name', 'like', "%{$search}%")
+                        ->orWhere('last_name', 'like', "%{$search}%");
+                })
+                    ->orWhere('program', 'like', "%{$search}%")
+                    ->orWhere('current_employer', 'like', "%{$search}%");
+            })
+            ->latest()
+            ->paginate(10);
     }
 }
