@@ -3,6 +3,10 @@ declare(strict_types=1);
 
 namespace App\Livewire;
 
+use App\Enum\UserRole;
+use App\Exceptions\BusinessRuleException;
+use App\Models\User;
+use App\Models\Alumni as AlumniModel;
 use App\Services\AlumniService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Validation\Rule;
@@ -44,17 +48,26 @@ class Alumni extends Component
     {
         $data = $this->validate();
 
-        $alumniService->create([
-            'user_id' => $data['userId'],
-            'program' => $data['program'],
-            'graduation_date' => $data['graduationDate'],
-            'current_employer' => $data['currentEmployer'] ?: null,
-            'current_position' => $data['currentPosition'] ?: null,
-        ]);
+        try {
+            $alumniService->create([
+                'user_id' => $data['userId'],
+                'program' => $data['program'],
+                'graduation_date' => $data['graduationDate'],
+                'current_employer' => $data['currentEmployer'] ?: null,
+                'current_position' => $data['currentPosition'] ?: null,
+            ]);
 
-        $this->resetForm();
-        $this->successMessage = 'Alumni profile was created successfully';
-        $this->showSuccessModal = true;
+            $this->resetForm();
+            $this->successMessage = 'Alumni profile was created successfully';
+            $this->showSuccessModal = true;
+        } catch (BusinessRuleException $e) {
+            $this->addError('userId', $e->getMessage());
+        }
+    }
+
+    public function closeSuccessModal() : void
+    {
+        $this->showSuccessModal = false;
     }
 
     public function edit(int $id, AlumniService $alumniService) : void
@@ -75,17 +88,21 @@ class Alumni extends Component
     {
         $data = $this->validate();
 
-        $alumniService->update($this->editingAlumniId, [
-            'user_id' => $data['userId'],
-            'program' => $data['program'],
-            'graduation_date' => $data['graduationDate'],
-            'current_employer' => $data['currentEmployer'] ?: null,
-            'current_position' => $data['currentPosition'] ?: null,
-        ]);
+        try {
+            $alumniService->update($this->editingAlumniId, [
+                'user_id' => $data['userId'],
+                'program' => $data['program'],
+                'graduation_date' => $data['graduationDate'],
+                'current_employer' => $data['currentEmployer'] ?: null,
+                'current_position' => $data['currentPosition'] ?: null,
+            ]);
 
-        $this->resetForm();
-        $this->successMessage = 'Alumni profile was updated successfully';
-        $this->showSuccessModal = true;
+            $this->resetForm();
+            $this->successMessage = 'Alumni profile was updated successfully';
+            $this->showSuccessModal = true;
+        } catch (BusinessRuleException $e) {
+            $this->addError('userId', $e->getMessage());
+        }
     }
 
     public function confirmDelete(int $id) : void
@@ -130,15 +147,24 @@ class Alumni extends Component
             'graduationDate',
             'currentEmployer',
             'currentPosition',
+            'editingAlumniId'
         ]);
 
         $this->resetValidation();
     }
 
-    public function render(AlumniService $alumniService) : View
+    public function render(AlumniService $alumniService): View
     {
+        $eligibleUsers = User::query()
+            ->where('role', UserRole::ALUMNI->value)
+            ->whereNotIn('id', AlumniModel::query()->select('user_id'))
+            ->orderBy('first_name')
+            ->orderBy('last_name')
+            ->get(['id', 'first_name', 'last_name']);
+
         return view('livewire.alumni', [
             'alumni' => $alumniService->getAll($this->search ?: null),
+            'eligibleUsers' => $eligibleUsers,
         ]);
     }
 }

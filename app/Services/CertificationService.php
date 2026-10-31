@@ -7,7 +7,7 @@ use App\Exceptions\BusinessRuleException;
 use App\Models\Certification;
 use App\Models\Student;
 use Carbon\Carbon;
-use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Log;
 
 final class CertificationService
@@ -84,10 +84,25 @@ final class CertificationService
         return Certification::with('student')->findOrFail($id);
     }
 
-    public function getAll() : Collection
+    public function getAll(?string $search = null): LengthAwarePaginator
     {
-        return Certification::with('student')
-                            ->latest('date_issued')
-                            ->get();
+        return Certification::query()
+            ->with('student')
+            ->when($search, function ($query, $search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('issuing_authority', 'like', "%{$search}%")
+                        ->orWhere('credential_id', 'like', "%{$search}%")
+                        ->orWhereHas('student', function ($studentQuery) use ($search) {
+                            $studentQuery->where(
+                                'student_id_number',
+                                'like',
+                                "%{$search}%"
+                            );
+                        });
+                });
+            })
+            ->latest('date_issued')
+            ->paginate(10);
     }
 }

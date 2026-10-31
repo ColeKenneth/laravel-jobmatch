@@ -1,6 +1,6 @@
 <?php
 
-use App\Livewire\AlumniList;
+use App\Livewire\Alumni;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -18,5 +18,5 @@ Route::middleware([
 });
 
 Route::middleware(['role:admin'])->prefix('admin')->group(function () {
-    Route::get('/alumni', AlumniList::class)->name('admin.alumni');
+    Route::get('/alumni', Alumni::class)->name('admin.alumni');
 });

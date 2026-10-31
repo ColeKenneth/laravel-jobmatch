@@ -9,8 +9,8 @@ use App\Exceptions\BusinessRuleException;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
 final class StudentService
@@ -70,12 +70,26 @@ final class StudentService
         return Student::where('id', $id)->exists();
     }
 
-    public function getAll() : Collection
+
+    public function getAll(?string $search = null): LengthAwarePaginator
     {
-        return Student::with('user')
+        return Student::query()
+            ->with('user')
+            ->when($search, function ($query, $search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('student_id_number', 'like', "%{$search}%")
+                        ->orWhere('program', 'like', "%{$search}%")
+                        ->orWhere('year_level', 'like', "%{$search}%")
+                        ->orWhereHas('user', function ($userQuery) use ($search) {
+                            $userQuery->where('first_name', 'like', "%{$search}%")
+                                ->orWhere('last_name', 'like', "%{$search}%");
+                        });
+                });
+            })
             ->orderByDesc('gwa')
-            ->get();
+            ->paginate(10);
     }
+
 
     public function getById(int $id) : Student
     {

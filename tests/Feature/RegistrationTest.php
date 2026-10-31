@@ -21,8 +21,11 @@ test('registration screen cannot be rendered if support is disabled', function (
 
 test('new users can register', function () {
     $response = $this->post('/register', [
-        'name' => 'Test User',
+        'first_name' => 'Test',
+        'middle_name' => 'Example',
+        'last_name' => 'User',
         'email' => 'test@example.com',
+        'role' => 'student',
         'password' => 'password',
         'password_confirmation' => 'password',
         'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature(),
@@ -30,6 +33,34 @@ test('new users can register', function () {
 
     $this->assertAuthenticated();
     $response->assertRedirect(route('dashboard', absolute: false));
+    $this->assertDatabaseHas('users', [
+        'first_name' => 'Test',
+        'middle_name' => 'Example',
+        'last_name' => 'User',
+        'email' => 'test@example.com',
+        'role' => 'student',
+        'is_active' => true,
+    ]);
+})->skip(function () {
+    return ! Features::enabled(Features::registration());
+}, 'Registration support is not enabled.');
+
+test('new users cannot self-register with a staff role', function () {
+    $response = $this->post('/register', [
+        'first_name' => 'Test',
+        'last_name' => 'User',
+        'email' => 'test@example.com',
+        'role' => 'admin',
+        'password' => 'password',
+        'password_confirmation' => 'password',
+        'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature(),
+    ]);
+
+    $response->assertSessionHasErrors('role');
+    $this->assertGuest();
+    $this->assertDatabaseMissing('users', [
+        'email' => 'test@example.com',
+    ]);
 })->skip(function () {
     return ! Features::enabled(Features::registration());
 }, 'Registration support is not enabled.');

@@ -8,7 +8,6 @@ use App\Exceptions\BusinessRuleException;
 use App\Models\Alumni;
 use App\Models\User;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
 final class AlumniService

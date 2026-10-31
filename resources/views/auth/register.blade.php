@@ -10,8 +10,29 @@
             @csrf
 
             <div>
-                <x-label for="name" value="{{ __('Name') }}" />
-                <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
+                <x-label for="first_name" value="{{ __('First Name') }}" />
+                <x-input id="first_name" class="block mt-1 w-full" type="text" name="first_name" :value="old('first_name')" required autofocus autocomplete="given-name" />
+            </div>
+
+            <div class="mt-4">
+                <x-label for="middle_name" value="{{ __('Middle Name (Optional)') }}" />
+                <x-input id="middle_name" class="block mt-1 w-full" type="text" name="middle_name" :value="old('middle_name')" autocomplete="additional-name" />
+            </div>
+
+            <div class="mt-4">
+                <x-label for="last_name" value="{{ __('Last Name') }}" />
+                <x-input id="last_name" class="block mt-1 w-full" type="text" name="last_name" :value="old('last_name')" required autocomplete="family-name" />
+            </div>
+
+            <div class="mt-4">
+                <x-label for="role" value="{{ __('Account Type') }}" />
+                <select id="role" name="role" required class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                    <option value="" disabled @selected(old('role') === null)>{{ __('Select an account type') }}</option>
+                    <option value="student" @selected(old('role') === 'student')>{{ __('Student') }}</option>
+                    <option value="alumni" @selected(old('role') === 'alumni')>{{ __('Alumni') }}</option>
+                    <option value="employer" @selected(old('role') === 'employer')>{{ __('Employer') }}</option>
+                    <option value="placement_officer" @selected(old('role') === 'placement_officer')>{{ __('Placement Officer') }}</option>
+                </select>
             </div>
 
             <div class="mt-4">
