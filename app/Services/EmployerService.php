@@ -7,6 +7,7 @@ use App\Enum\UserRole;
 use App\Exceptions\BusinessRuleException;
 use App\Models\Employer;
 use App\Models\User;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
@@ -72,10 +73,24 @@ final class EmployerService
         return Employer::with('user')->findOrFail($id);
     }
 
-    public function getAll() : Collection
+
+    public function getAll(?string $search = null) : LengthAwarePaginator
     {
-        return Employer::with('user')
-            ->get();
+        return Employer::query()
+            ->with('user')
+            ->when($search, function ($query, $search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('company_name', 'like', "%{$search}%")
+                        ->orWhere('industry', 'like', "%{$search}%")
+                        ->orWhereHas('user', function ($userQuery) use ($search) {
+                            $userQuery->where('first_name', 'like', "%{$search}%")
+                                ->orWhere('last_name', 'like', "%{$search}%");
+                        });
+                });
+            })
+            ->latest()
+            ->paginate(10);
     }
+
 
 }

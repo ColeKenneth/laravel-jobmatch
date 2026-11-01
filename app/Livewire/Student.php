@@ -133,8 +133,7 @@ class Student extends Component
 
         $studentService->delete($this->deletingStudentId);
 
-        $this->deletingStudentId = null;
-        $this->showDeleteModal = false;
+        $this->closeDeleteModal();
     }
 
     public function cancelEdit() : void

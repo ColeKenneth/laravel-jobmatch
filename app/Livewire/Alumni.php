@@ -119,8 +119,7 @@ class Alumni extends Component
 
         $alumniService->delete($this->deletingAlumniId);
 
-        $this->deletingAlumniId = null;
-        $this->showDeleteModal = false;
+        $this->closeDeleteModal();
     }
 
     public function cancelEdit() : void
