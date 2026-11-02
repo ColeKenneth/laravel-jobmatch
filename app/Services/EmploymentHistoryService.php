@@ -7,6 +7,7 @@ use App\Exceptions\BusinessRuleException;
 use App\Models\Alumni;
 use App\Models\EmploymentHistory;
 use Carbon\Carbon;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
@@ -66,11 +67,11 @@ final class EmploymentHistoryService
        return EmploymentHistory::where('id', $id)->exists();
    }
 
-   public function getAll() : Collection
+   public function getAll() : LengthAwarePaginator
    {
        return EmploymentHistory::with('alumni')
            ->latest('start_date')
-           ->get();
+           ->paginate(10);
    }
 
    public function getByAlumni(int $alumniId) : Collection

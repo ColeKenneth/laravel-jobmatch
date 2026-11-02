@@ -7,9 +7,13 @@ use App\Exceptions\AlreadyExistsException;
 use App\Exceptions\BusinessRuleException;
 use App\Services\CertificationService;
 use Illuminate\Contracts\View\View;
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithPagination;
 
+#[Layout('layouts.app')]
+#[Title('Certification')]
 class Certification extends Component
 {
     use WithPagination;
@@ -37,7 +41,7 @@ class Certification extends Component
             'name' => ['required', 'string', 'max:100'],
             'issuingAuthority' => ['required', 'string', 'max:100'],
             'dateIssued' => ['required', 'date'],
-            'expiryDate' => ['nullable', 'date'],
+            'expiryDate' => ['nullable', 'date', 'after:dateIssued'],
             'verificationUrl' => ['nullable', 'string', 'max:500'],
             'credentialId' => ['nullable', 'string', 'max:50'],
         ];
