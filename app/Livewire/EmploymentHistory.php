@@ -114,7 +114,39 @@ class EmploymentHistory extends Component
             $this->addError('alumniId', $e->getMessage());
         }
     }
-    
+
+    public function confirmDelete(int $id) : void
+    {
+        $this->deletingEmploymentHistoryId = $id;
+        $this->showDeleteModal = true;
+    }
+
+    public function delete(EmploymentHistoryService $employmentHistoryService) : void
+    {
+        if ($this->deletingEmploymentHistoryId === null) {
+            return;
+        }
+
+        $employmentHistoryService->delete($this->deletingEmploymentHistoryId);
+        $this->closeDeleteModal();
+    }
+
+    public function closeDeleteModal() : void
+    {
+        $this->deletingEmploymentHistoryId = null;
+        $this->showDeleteModal = false;
+    }
+
+    public function cancelEdit() : void
+    {
+        $this->resetForm();
+    }
+
+    public function updatedSearch() : void
+    {
+        $this->resetPage();
+    }
+
     private function resetForm() : void
     {
         $this->reset([
@@ -130,8 +162,10 @@ class EmploymentHistory extends Component
     }
 
 
-    public function render() : View
+    public function render(EmploymentHistoryService $employmentHistoryService) : View
     {
-        return view('livewire.employment-history');
+        return view('livewire.employment-history', [
+            'employmentHistories' => $employmentHistoryService->getAll(),
+        ]);
     }
 }

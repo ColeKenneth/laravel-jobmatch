@@ -37,10 +37,10 @@ class Alumni extends Component
     {
         return [
             'userId' => ['required', 'exists:users,id', Rule::unique('alumnis', 'user_id')->ignore($this->editingAlumniId)],
-            'program' => 'required|string|max:100',
-            'graduationDate' => 'required|date',
-            'currentEmployer' => 'nullable|string|max:100',
-            'currentPosition' => 'nullable|string|max:50',
+            'program' => ['required', 'string', 'max:100'],
+            'graduationDate' => ['required', 'date'],
+            'currentEmployer' => ['nullable', 'string', 'max:100'],
+            'currentPosition' => ['nullable', 'string', 'max:50'],
         ];
     }
 

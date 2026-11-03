@@ -7,6 +7,7 @@ use App\Exceptions\BusinessRuleException;
 use App\Models\Internship;
 use App\Models\Student;
 use Carbon\Carbon;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
@@ -57,11 +58,11 @@ final class InternshipService
         return Internship::where('id', $id)->exists();
     }
 
-    public function getAll() : Collection
+    public function getAll() : LengthAwarePaginator
     {
         return Internship::with('student')
             ->latest('start_date')
-            ->get();
+            ->paginate(10);
     }
 
     public function getById(int $id) : Internship

@@ -37,14 +37,16 @@ class Student extends Component
     protected function rules() : array
     {
         return [
-            'userId' => 'required', 'exists:users,id', Rule::unique('students', 'user_id')->ignore($this->editingStudentId),
-            'studentIdNumber' => 'required|string|max:30|unique:students,student_id_number', Rule::unique('students', 'student_id_number')->ignore($this->editingStudentId),
-            'program' => 'required|string|max:100',
-            'yearLevel' => 'required', Rule::enum(YearLevel::class),
-            'gwa' => 'required|numeric|between:1.00,5.00',
-            'graduationDate' => 'nullable|date',
-            'resumeFilePath' => 'nullable|string|max:100',
-            'resumeText' => 'nullable|string',
+            'userId' => ['required', 'exists:users,id',
+                Rule::unique('students', 'id')->ignore($this->editingStudentId)],
+            'studentIdNumber' => ['required', 'string', 'max:30', 'unique:students,student_id_number',
+                Rule::unique('students', 'student_id_number')->ignore($this->editingStudentId)],
+            'program' => ['required', 'string', 'max:100'],
+            'yearLevel' => ['required', Rule::enum(YearLevel::class)],
+            'gwa' => ['required', 'numeric', 'between:1.00,5.00'],
+            'graduationDate' => ['nullable', 'date'],
+            'resumeFilePath' => ['nullable', 'string', 'max:100'],
+            'resumeText' => ['nullable', 'string'],
         ];
     }
 
