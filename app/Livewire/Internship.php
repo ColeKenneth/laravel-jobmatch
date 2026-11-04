@@ -2,6 +2,10 @@
 
 namespace App\Livewire;
 
+use App\Exceptions\AlreadyExistsException;
+use App\Exceptions\BusinessRuleException;
+use App\Services\InternshipService;
+use App\Traits\HandlesCrud;
 use Illuminate\Contracts\View\View;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Layout;
@@ -14,6 +18,7 @@ use Livewire\WithPagination;
 class Internship extends Component
 {
     use WithPagination;
+    use HandlesCrud;
 
     public string $studentId = '';
     public string $companyName = '';
@@ -23,12 +28,6 @@ class Internship extends Component
     public string $skillsGained = '';
     public string $supervisor = '';
     public string $supervisorEmail = '';
-
-    public string $successMessage = '';
-    public bool $showSuccessModal = false;
-    public bool $showDeleteModal = false;
-    public ?int $editingInternshipId = null;
-    public ?int $deletingInternshipId = null;
 
     public string $search = '';
 
@@ -45,6 +44,47 @@ class Internship extends Component
             'supervisor' => ['nullable', 'string'],
             'supervisorEmail' => ['nullable', 'email'],
         ];
+    }
+
+    public function create(InternshipService $internshipService) : void
+    {
+        $data = $this->validate();
+
+        try {
+            $internshipService->create([
+                'student_id' => $data['studentId'],
+                'company_name' => $data['companyName'],
+                'position' => $data['position'],
+                'start_date' => $data['startDate'],
+                'end_date' => $data['endDate'],
+                'skills_gained' => $data['skillsGained'] ?: null,
+                'supervisor' => $data['supervisor'] ?: null,
+                'supervisor_email' => $data['supervisorEmail'] ?: null,
+            ]);
+
+            $this->resetForm();
+            $this->successMessage = "Internship created successfully.";
+            $this->showSuccessModal = true;
+        } catch (AlreadyExistsException | BusinessRuleException $e) {
+            $this->addError('studentId', $e->getMessage());
+        }
+    }
+
+    private function resetForm() : void
+    {
+        $this->reset([
+            'studentId',
+            'companyName',
+            'position',
+            'startDate',
+            'endDate',
+            'skillsGained',
+            'supervisor',
+            'supervisorEmail',
+            'editingInternshipId'
+        ]);
+
+        $this->resetValidation();
     }
     public function render() : View
     {

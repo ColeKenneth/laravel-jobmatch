@@ -9,6 +9,7 @@ use App\Exceptions\BusinessRuleException;
 use App\Models\Employer as EmployerModel;
 use App\Models\User;
 use App\Services\EmployerService;
+use App\Traits\HandlesCrud;
 use Illuminate\Contracts\View\View;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Layout;
@@ -21,6 +22,7 @@ use Livewire\WithPagination;
 class Employer extends Component
 {
     use WithPagination;
+    use HandlesCrud;
 
     public string $userId = '';
     public string $companyName = '';
@@ -28,12 +30,6 @@ class Employer extends Component
     public string $website = '';
     public string $companyDescription = '';
     public string $logoUrl = '';
-    public string $successMessage = '';
-    public bool $showSuccessModal = false;
-    public bool $showDeleteModal = false;
-    public ?int $editingEmployerId = null;
-    public ?int $deletingEmployerId = null;
-    public string $search = '';
 
     protected function rules() : array
     {
@@ -52,33 +48,20 @@ class Employer extends Component
         $data = $this->validate();
 
         try {
-            $employerService->create([
-                'user_id' => $data['userId'],
-                'company_name' => $data['companyName'],
-                'industry' => $data['industry'],
-                'website' => $data['website'] ?: null,
-                'company_description' => $data['companyDescription'] ?: null,
-                'logo_url' => $data['logoUrl'],
-            ]);
+            $employerService->create($this->payload($data));
 
             $this->resetForm();
-            $this->successMessage = "Employer was successfully created.";
-            $this->showSuccessModal = true;
+            $this->showSuccess("Employer was successfully created.");
         } catch (AlreadyExistsException | BusinessRuleException $e) {
             $this->addError('userId', $e->getMessage());
         }
-    }
-
-    public function closeSuccessModal() : void
-    {
-        $this->showSuccessModal = false;
     }
 
     public function edit(int $id, EmployerService $employerService) : void
     {
         $employer = $employerService->getById($id);
 
-        $this->editingEmployerId = $employer->id;
+        $this->editingId = $employer->id;
         $this->userId = (string) $employer->user_id;
         $this->companyName = $employer->company_name;
         $this->industry = $employer->industry;
@@ -91,60 +74,30 @@ class Employer extends Component
 
     public function update(EmployerService $employerService) : void
     {
-        if ($this->editingEmployerId === null) {
+        if (!$this->isEditing()) {
             return;
         }
 
         $data = $this->validate();
 
         try {
-            $employerService->update($this->editingEmployerId, [
-                'user_id' => $data['userId'],
-                'company_name' => $data['companyName'],
-                'industry' => $data['industry'],
-                'website' => $data['website'] ?: null,
-                'company_description' => $data['companyDescription'] ?: null,
-                'logo_url' => $data['logoUrl']
-            ]);
+            $employerService->update($this->editingId, $this->payload($data));
 
             $this->resetForm();
-            $this->successMessage = "Employer was updated successfully.";
-            $this->showSuccessModal = true;
+            $this->showSuccess("Employer was successfully updated.");
         } catch (AlreadyExistsException | BusinessRuleException $e) {
             $this->addError('userId', $e->getMessage());
         }
     }
 
-    public function confirmDelete(int $id) : void
-    {
-        $this->deletingEmployerId = $id;
-        $this->showDeleteModal = true;
-    }
-
     public function delete(EmployerService $employerService) : void
     {
-        if ($this->deletingEmployerId === null) {
+        if ($this->deletingId === null) {
             return;
         }
 
-        $employerService->delete($this->deletingEmployerId);
+        $employerService->delete($this->deletingId);
         $this->closeDeleteModal();
-    }
-
-    public function cancelEdit() : void
-    {
-        $this->resetForm();
-    }
-
-    public function closeDeleteModal() : void
-    {
-        $this->deletingEmployerId = null;
-        $this->showDeleteModal = false;
-    }
-
-    public function updatedSearch() : void
-    {
-        $this->resetPage();
     }
 
     private function resetForm() : void
@@ -156,10 +109,22 @@ class Employer extends Component
             'website',
             'companyDescription',
             'logoUrl',
-            'editingEmployerId'
+            'editingId'
         ]);
 
         $this->resetValidation();
+    }
+
+    private function payload(array $data) : array
+    {
+        return [
+            'user_id' => $data['userId'],
+            'company_name' => $data['companyName'],
+            'industry' => $data['industry'],
+            'website' => $data['website'] ?: null,
+            'company_description' => $data['companyDescription'] ?: null,
+            'logo_url' => $data['logoUrl'],
+        ];
     }
 
     public function render(EmployerService $employerService) : View
