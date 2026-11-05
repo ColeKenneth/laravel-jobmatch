@@ -6,6 +6,7 @@ namespace App\Livewire;
 use App\Exceptions\AlreadyExistsException;
 use App\Exceptions\BusinessRuleException;
 use App\Services\CertificationService;
+use App\Traits\HandlesCrud;
 use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -17,6 +18,7 @@ use Livewire\WithPagination;
 class Certification extends Component
 {
     use WithPagination;
+    use HandlesCrud;
 
     public string $studentId = '';
     public string $name = '';
@@ -25,14 +27,6 @@ class Certification extends Component
     public string $expiryDate = '';
     public string $verificationUrl = '';
     public string $credentialId = '';
-    public string $successMessage = '';
-    public bool $showSuccessModal = false;
-    public bool $showDeleteModal = false;
-
-    public ?int $editingCertificationId = null;
-    public ?int $deletingCertificationId = null;
-
-    public string $search = '';
 
     protected function rules(): array
     {
@@ -52,35 +46,19 @@ class Certification extends Component
         $data = $this->validate();
 
         try {
-            $certificationService->create([
-                'student_id' => $data['studentId'],
-                'name' => $data['name'],
-                'issuing_authority' => $data['issuingAuthority'],
-                'date_issued' => $data['dateIssued'],
-                'expiry_date' => $data['expiryDate'] ?: null,
-                'verification_url' => $data['verificationUrl'] ?: null,
-                'credential_id' => $data['credentialId'] ?: null,
-            ]);
-
+            $certificationService->create($this->payload($data));
             $this->resetForm();
-            $this->successMessage = 'Certification was successfully created.';
-            $this->showSuccessModal = true;
-
+            $this->showSuccess("Certification created successfully.");
         } catch (AlreadyExistsException | BusinessRuleException $e) {
             $this->addError('studentId', $e->getMessage());
         }
-    }
-
-    public function closeSuccessModal(): void
-    {
-        $this->showSuccessModal = false;
     }
 
     public function edit(int $id, CertificationService $certificationService): void
     {
         $certification = $certificationService->getById($id);
 
-        $this->editingCertificationId = $certification->id;
+        $this->editingId = $certification->id;
         $this->studentId = (string) $certification->student_id;
         $this->name = $certification->name;
         $this->issuingAuthority = $certification->issuing_authority;
@@ -94,63 +72,42 @@ class Certification extends Component
 
     public function update(CertificationService $certificationService): void
     {
-        if ($this->editingCertificationId === null) {
+        if (!$this->isEditing()) {
             return;
         }
 
         $data = $this->validate();
 
         try {
-            $certificationService->update($this->editingCertificationId, [
-                'student_id' => $data['studentId'],
-                'name' => $data['name'],
-                'issuing_authority' => $data['issuingAuthority'],
-                'date_issued' => $data['dateIssued'],
-                'expiry_date' => $data['expiryDate'] ?: null,
-                'verification_url' => $data['verificationUrl'] ?: null,
-                'credential_id' => $data['credentialId'] ?: null,
-            ]);
-
+            $certificationService->update($this->editingId, $this->payload($data));
             $this->resetForm();
-            $this->successMessage = 'Certification was updated successfully.';
-            $this->showSuccessModal = true;
-
+            $this->showSuccess("Certification updated successfully.");
         } catch (AlreadyExistsException | BusinessRuleException $e) {
             $this->addError('studentId', $e->getMessage());
         }
     }
 
-    public function confirmDelete(int $id): void
-    {
-        $this->deletingCertificationId = $id;
-        $this->showDeleteModal = true;
-    }
-
     public function delete(CertificationService $certificationService): void
     {
-        if ($this->deletingCertificationId === null) {
+        if ($this->deletingId === null) {
             return;
         }
 
-        $certificationService->delete($this->deletingCertificationId);
-
+        $certificationService->delete($this->deletingId);
         $this->closeDeleteModal();
     }
 
-    public function cancelEdit(): void
+    private function payload(array $data) : array
     {
-        $this->resetForm();
-    }
-
-    public function closeDeleteModal(): void
-    {
-        $this->deletingCertificationId = null;
-        $this->showDeleteModal = false;
-    }
-
-    public function updatedSearch(): void
-    {
-        $this->resetPage();
+        return [
+            'student_id' => $data['studentId'],
+            'name' => $data['name'],
+            'issuing_authority' => $data['issuingAuthority'],
+            'date_issued' => $data['dateIssued'],
+            'expiry_date' => $data['expiryDate'] ?: null,
+            'verification_url' => $data['verificationUrl'] ?: null,
+            'credential_id' => $data['credentialId'] ?: null,
+        ];
     }
 
     private function resetForm(): void
@@ -163,7 +120,7 @@ class Certification extends Component
             'expiryDate',
             'verificationUrl',
             'credentialId',
-            'editingCertificationId',
+            'editingId',
         ]);
 
         $this->resetValidation();

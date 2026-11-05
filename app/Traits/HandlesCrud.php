@@ -5,14 +5,14 @@ namespace App\Traits;
 
 trait HandlesCrud
 {
-    public string $successMessage = '';
-    public bool $showSuccessModal = false;
-    public bool $showDeleteModal = false;
+    protected string $successMessage = '';
+    protected bool $showSuccessModal = false;
+    protected bool $showDeleteModal = false;
 
-    public ?int $deletingId = null;
-    public ?int $editingId = null;
+    protected ?int $deletingId = null;
+    protected ?int $editingId = null;
 
-    public string $search = '';
+    protected string $search = '';
 
     public function closeSuccessModal() : void
     {
@@ -52,6 +52,37 @@ trait HandlesCrud
         $this->successMessage = $message;
         $this->showSuccessModal = true;
     }
+    
+    public function getSuccessMessageProperty(): string
+    {
+        return $this->successMessage;
+    }
+
+    public function getShowSuccessModalProperty(): bool
+    {
+        return $this->showSuccessModal;
+    }
+
+    public function getShowDeleteModalProperty(): bool
+    {
+        return $this->showDeleteModal;
+    }
+
+    public function getDeletingIdProperty(): ?int
+    {
+        return $this->deletingId;
+    }
+
+    public function getEditingIdProperty(): ?int
+    {
+        return $this->editingId;
+    }
+
+    public function getSearchProperty(): string
+    {
+        return $this->search;
+    }
 
     abstract protected function resetForm() : void;
+    abstract protected function payload(array $data) : array;
 }

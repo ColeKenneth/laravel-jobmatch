@@ -10,6 +10,7 @@ use App\Exceptions\BusinessRuleException;
 use App\Models\User;
 use App\Models\Student as StudentModel;
 use App\Services\StudentService;
+use App\Traits\HandlesCrud;
 use Illuminate\Contracts\View\View;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
@@ -18,6 +19,7 @@ use Livewire\WithPagination;
 class Student extends Component
 {
     use WithPagination;
+    use HandlesCrud;
 
     public string $userId = '';
     public string $studentIdNumber = '';
@@ -27,12 +29,6 @@ class Student extends Component
     public string $graduationDate = '';
     public string $resumeFilePath = '';
     public string $resumeText = '';
-    public string $successMessage = '';
-    public bool $showSuccessModal = false;
-    public ?int $editingStudentId = null;
-    public ?int $deletingStudentId = null;
-    public bool $showDeleteModal = false;
-    public string $search = '';
 
     protected function rules() : array
     {
@@ -56,13 +52,7 @@ class Student extends Component
 
         try {
             $studentService->create($data['studentIdNumber'], [
-                'user_id' => $data['userId'],
-                'program' => $data['program'],
-                'year_level' => $data['yearLevel'],
-                'gwa' => $data['gwa'],
-                'graduation_date' => $data['graduationDate'] ?: null,
-                'resume_file_path' => $data['resumeFilePath'] ?: null,
-                'resume_text' => $data['resumeText'] ?: null,
+
             ]);
 
             $this->resetForm();
@@ -164,8 +154,13 @@ class Student extends Component
             'graduationDate',
             'resumeFilePath',
             'resumeText',
-            'editingStudentId'
+            'editingId'
         ]);
+    }
+
+    private function payload(array $data) : array
+    {
+
     }
 
     public function render(StudentService $studentService) : View

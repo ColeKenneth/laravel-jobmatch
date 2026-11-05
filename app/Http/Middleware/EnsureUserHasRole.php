@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
+use App\Enum\UserRole;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -10,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 class EnsureUserHasRole
 {
 
-    public function handle(Request $request, Closure $next, string $role): Response
+    public function handle(Request $request, Closure $next, UserRole $role): Response
     {
         if (!$request->user()) {
             abort(Response::HTTP_UNAUTHORIZED, "Unauthorized");

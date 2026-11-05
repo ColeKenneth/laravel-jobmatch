@@ -8,6 +8,7 @@ use App\Exceptions\BusinessRuleException;
 use App\Models\User;
 use App\Models\Alumni as AlumniModel;
 use App\Services\AlumniService;
+use App\Traits\HandlesCrud;
 use Illuminate\Contracts\View\View;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Layout;
@@ -20,6 +21,7 @@ use Livewire\WithPagination;
 class Alumni extends Component
 {
     use WithPagination;
+    use HandlesCrud;
 
     public string $userId = '';
     public string $program = '';
@@ -27,16 +29,11 @@ class Alumni extends Component
     public string $currentEmployer = '';
     public string $currentPosition = '';
     public string $successMessage = '';
-    public bool $showSuccessModal = false;
-    public ?int $editingAlumniId = null;
-    public ?int $deletingAlumniId = null;
-    public bool $showDeleteModal = false;
-    public string $search = '';
 
     protected function rules(): array
     {
         return [
-            'userId' => ['required', 'exists:users,id', Rule::unique('alumnis', 'user_id')->ignore($this->editingAlumniId)],
+            'userId' => ['required', 'exists:users,id', Rule::unique('alumnis', 'user_id')->ignore($this->editingId)],
             'program' => ['required', 'string', 'max:100'],
             'graduationDate' => ['required', 'date'],
             'currentEmployer' => ['nullable', 'string', 'max:100'],
@@ -49,32 +46,19 @@ class Alumni extends Component
         $data = $this->validate();
 
         try {
-            $alumniService->create([
-                'user_id' => $data['userId'],
-                'program' => $data['program'],
-                'graduation_date' => $data['graduationDate'],
-                'current_employer' => $data['currentEmployer'] ?: null,
-                'current_position' => $data['currentPosition'] ?: null,
-            ]);
-
+            $alumniService->create($this->payload($data));
             $this->resetForm();
-            $this->successMessage = 'Alumni profile was created successfully';
-            $this->showSuccessModal = true;
+            $this->showSuccess("Alumni created successfully.");
         } catch (BusinessRuleException $e) {
             $this->addError('userId', $e->getMessage());
         }
-    }
-
-    public function closeSuccessModal() : void
-    {
-        $this->showSuccessModal = false;
     }
 
     public function edit(int $id, AlumniService $alumniService) : void
     {
         $alumni = $alumniService->getById($id);
 
-        $this->editingAlumniId = $alumni->id;
+        $this->editingId = $alumni->id;
         $this->userId = (string)$alumni->user_id;
         $this->program = $alumni->program;
         $this->graduationDate = $alumni->graduation_date->format('Y-m-d');
@@ -89,53 +73,22 @@ class Alumni extends Component
         $data = $this->validate();
 
         try {
-            $alumniService->update($this->editingAlumniId, [
-                'user_id' => $data['userId'],
-                'program' => $data['program'],
-                'graduation_date' => $data['graduationDate'],
-                'current_employer' => $data['currentEmployer'] ?: null,
-                'current_position' => $data['currentPosition'] ?: null,
-            ]);
-
+            $alumniService->update($this->editingId, $this->payload($data));
             $this->resetForm();
-            $this->successMessage = 'Alumni profile was updated successfully';
-            $this->showSuccessModal = true;
+            $this->showSuccess("Alumni updated successfully.");
         } catch (BusinessRuleException $e) {
             $this->addError('userId', $e->getMessage());
         }
     }
 
-    public function confirmDelete(int $id) : void
-    {
-        $this->deletingAlumniId = $id;
-        $this->showDeleteModal = true;
-    }
-
     public function delete(AlumniService $alumniService) : void
     {
-        if ($this->deletingAlumniId === null) {
+        if ($this->deletingId === null) {
             return;
         }
 
-        $alumniService->delete($this->deletingAlumniId);
-
+        $alumniService->delete($this->deletingId);
         $this->closeDeleteModal();
-    }
-
-    public function cancelEdit() : void
-    {
-        $this->resetForm();
-    }
-
-    public function closeDeleteModal() : void
-    {
-        $this->deletingAlumniId = null;
-        $this->showDeleteModal = false;
-    }
-
-    public function updatedSearch() : void
-    {
-        $this->resetPage();
     }
 
     private function resetForm() : void
@@ -146,10 +99,21 @@ class Alumni extends Component
             'graduationDate',
             'currentEmployer',
             'currentPosition',
-            'editingAlumniId'
+            'editingId'
         ]);
 
         $this->resetValidation();
+    }
+
+    private function payload(array $data) : array
+    {
+        return [
+            'user_id' => $data['userId'],
+            'program' => $data['program'],
+            'graduation_date' => $data['graduationDate'],
+            'current_employer' => $data['currentEmployer'] ?: null,
+            'current_position' => $data['currentPosition'] ?: null,
+        ];
     }
 
     public function render(AlumniService $alumniService): View

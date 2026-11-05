@@ -28,9 +28,6 @@ class Internship extends Component
     public string $skillsGained = '';
     public string $supervisor = '';
     public string $supervisorEmail = '';
-
-    public string $search = '';
-
     protected function rules() : array
     {
         return [
@@ -51,23 +48,59 @@ class Internship extends Component
         $data = $this->validate();
 
         try {
-            $internshipService->create([
-                'student_id' => $data['studentId'],
-                'company_name' => $data['companyName'],
-                'position' => $data['position'],
-                'start_date' => $data['startDate'],
-                'end_date' => $data['endDate'],
-                'skills_gained' => $data['skillsGained'] ?: null,
-                'supervisor' => $data['supervisor'] ?: null,
-                'supervisor_email' => $data['supervisorEmail'] ?: null,
-            ]);
+
+            $internshipService->create($this->payload($data));
 
             $this->resetForm();
-            $this->successMessage = "Internship created successfully.";
-            $this->showSuccessModal = true;
+            $this->showSuccess('Internship created.');
         } catch (AlreadyExistsException | BusinessRuleException $e) {
             $this->addError('studentId', $e->getMessage());
         }
+    }
+
+    public function edit(int $id, InternshipService $internshipService) : void
+    {
+        $internship = $internshipService->getById($id);
+
+        $this->editingId = $id;
+        $this->studentId = (string) $internship->student_id;
+        $this->companyName = $internship->company_name;
+        $this->position = $internship->position;
+        $this->startDate = $internship->start_date->format('Y-m-d');
+        $this->endDate = $internship->end_date?->format( 'Y-m-d') ?? '';
+        $this->skillsGained = $internship->skills_gained ?? '';
+        $this->supervisor = $internship->supervisor ?? '';
+        $this->supervisorEmail = $internship->supervisor_email ?? '';
+
+        $this->resetValidation();
+    }
+
+    public function update(InternshipService $internshipService) : void
+    {
+        if (!$this->isEditing()) {
+            return;
+        }
+
+        $data = $this->validate();
+
+        try {
+            $internshipService->update($this->editingId, $this->payload($data));
+
+            $this->resetForm();
+            $this->showSuccess('Internship updated.');
+        } catch (AlreadyExistsException | BusinessRuleException $e) {
+            $this->addError('studentId', $e->getMessage());
+        }
+    }
+
+    public function delete(InternshipService $internshipService) : void
+    {
+        if ($this->deletingId === null) {
+            return;
+        }
+
+        $internshipService->delete($this->deletingId);
+        $this->closeDeleteModal();
     }
 
     private function resetForm() : void
@@ -81,10 +114,24 @@ class Internship extends Component
             'skillsGained',
             'supervisor',
             'supervisorEmail',
-            'editingInternshipId'
+            'editingId'
         ]);
 
         $this->resetValidation();
+    }
+
+    private function payload(array $data) : array
+    {
+        return [
+            'student_id' => $data['studentId'],
+            'company_name' => $data['companyName'],
+            'position' => $data['position'],
+            'start_date' => $data['startDate'],
+            'end_date' => $data['endDate'],
+            'skills_gained' => $data['skillsGained'] ?: null,
+            'supervisor' => $data['supervisor'] ?: null,
+            'supervisor_email' => $data['supervisorEmail'] ?: null,
+        ];
     }
     public function render() : View
     {
