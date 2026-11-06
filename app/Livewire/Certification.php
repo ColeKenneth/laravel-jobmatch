@@ -97,7 +97,7 @@ class Certification extends Component
         $this->closeDeleteModal();
     }
 
-    private function payload(array $data) : array
+    protected function payload(array $data) : array
     {
         return [
             'student_id' => $data['studentId'],
@@ -110,7 +110,7 @@ class Certification extends Component
         ];
     }
 
-    private function resetForm(): void
+    protected function resetForm(): void
     {
         $this->reset([
             'studentId',

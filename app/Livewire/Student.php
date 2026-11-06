@@ -51,14 +51,9 @@ class Student extends Component
         $data = $this->validate();
 
         try {
-            $studentService->create($data['studentIdNumber'], [
-
-            ]);
-
+            $studentService->create($this->studentIdNumber, $this->payload($data));
             $this->resetForm();
-
-            $this->successMessage = "Student profile was created successfully.";
-            $this->showSuccessModal = true;
+            $this->showSuccess("Student created successfully.");
         }  catch (AlreadyExistsException | BusinessRuleException $e) {
             $this->addError('userId', $e->getMessage());
         }
@@ -68,8 +63,7 @@ class Student extends Component
     {
         $student = $studentService->getById($id);
 
-        $this->editingStudentId = $student->id;
-
+        $this->editingId = $student->id;
         $this->userId = (string) $student->user_id;
         $this->studentIdNumber = $student->student_id_number;
         $this->program = $student->program;
@@ -84,66 +78,31 @@ class Student extends Component
 
     public function update(StudentService $studentService) : void
     {
-        if ($this->editingStudentId === null) {
+        if (!$this->isEditing()) {
             return;
         }
 
         $data = $this->validate();
 
         try {
-            $studentService->update($this->editingStudentId, [
-                'user_id' => $data['userId'],
-                'student_id_number' => $data['studentIdNumber'],
-                'program' => $data['program'],
-                'year_level' => $data['yearLevel'],
-                'gwa' => $data['gwa'],
-                'graduation_date' => $data['graduationDate'] ?: null,
-                'resume_file_path' => $data['resumeFilePath'] ?: null,
-                'resume_text' => $data['resumeText'] ?: null,
-            ]);
-
+            $studentService->update($this->editingId, $this->payload($data));
             $this->resetForm();
-
-            $this->successMessage = "Student profile was updated successfully.";
-            $this->showSuccessModal = true;
+            $this->showSuccess("Student updated successfully.");
         } catch (AlreadyExistsException | BusinessRuleException $e) {
             $this->addError('studentIdNumber', $e->getMessage());
         }
     }
 
-    public function confirmDelete(int $id) : void
-    {
-        $this->deletingStudentId = $id;
-        $this->showDeleteModal = true;
-    }
-
     public function delete(StudentService $studentService) : void
     {
-        if ($this->deletingStudentId === null) {
+        if ($this->deletingId === null) {
             return;
         }
 
-        $studentService->delete($this->deletingStudentId);
-
+        $studentService->delete($this->deletingId);
         $this->closeDeleteModal();
     }
-
-    public function cancelEdit() : void
-    {
-        $this->resetForm();
-    }
-
-    public function closeDeleteModal() : void
-    {
-        $this->deletingStudentId = null;
-        $this->showDeleteModal = false;
-    }
-
-    public function updatedSearch() : void
-    {
-        $this->resetPage();
-    }
-    private function resetForm() : void
+    protected function resetForm() : void
     {
         $this->reset([
             'userId',
@@ -158,9 +117,18 @@ class Student extends Component
         ]);
     }
 
-    private function payload(array $data) : array
+    protected function payload(array $data) : array
     {
-
+        return [
+            'user_id' => $data['userId'],
+            'student_id_number' => $data['studentIdNumber'],
+            'program' => $data['program'],
+            'year_level' => $data['yearLevel'],
+            'gwa' => $data['gwa'],
+            'graduation_date' => $data['graduationDate'] ?: null,
+            'resume_file_path' => $data['resumeFilePath'] ?: null,
+            'resume_text' => $data['resumeText'] ?: null,
+        ];
     }
 
     public function render(StudentService $studentService) : View

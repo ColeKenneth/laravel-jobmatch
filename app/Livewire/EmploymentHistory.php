@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Livewire;
 
@@ -95,7 +96,7 @@ class EmploymentHistory extends Component
         $this->closeDeleteModal();
     }
 
-    private function resetForm() : void
+    protected function resetForm() : void
     {
         $this->reset([
             'alumniId',
@@ -109,7 +110,7 @@ class EmploymentHistory extends Component
         ]);
     }
 
-    private function payload(array $data) : array
+    protected function payload(array $data) : array
     {
         return [
             'alumni_id' => $data['alumniId'],

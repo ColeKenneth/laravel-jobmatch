@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Livewire;
 
@@ -103,7 +104,7 @@ class Internship extends Component
         $this->closeDeleteModal();
     }
 
-    private function resetForm() : void
+    protected function resetForm() : void
     {
         $this->reset([
             'studentId',
@@ -120,7 +121,7 @@ class Internship extends Component
         $this->resetValidation();
     }
 
-    private function payload(array $data) : array
+    protected function payload(array $data) : array
     {
         return [
             'student_id' => $data['studentId'],

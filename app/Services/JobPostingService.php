@@ -7,22 +7,27 @@ use App\Exceptions\BusinessRuleException;
 use App\Models\Employer;
 use App\Models\JobPosting;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
 final class JobPostingService
 {
-   private function validateRules(array $data, ?JobPosting $jobPosting) : void
+   private function validateRules(array $data, ?JobPosting $jobPosting = null) : void
    {
        $minSalary = array_key_exists('min_salary', $data) ? $data['min_salary'] : $jobPosting?->min_salary;
-       $maxSalary = array_key_exists('max_salary', $data) ? $data['max_salary'] : $jobPosting->max_salary;
+       $maxSalary = array_key_exists('max_salary', $data) ? $data['max_salary'] : $jobPosting?->max_salary;
 
        if ($minSalary !== null && $maxSalary !== null && (float) $minSalary > (float) $maxSalary) {
            throw new BusinessRuleException("Minimum salary cannot be greater than the maximum salary.");
        }
 
-       if (array_key_exists('deadline', $data) && $data['deadline'] !== null && Carbon::parse($data['deadline'])->isPast()) {
+       $deadline = $data['deadline'] ?? null;
+       $deadlineChanged = $jobPosting === null
+           || $jobPosting->deadline?->format('Y-m-d H:i') !== Carbon::parse($deadline)->format('Y-m-d H:i');
+
+       if ($deadline !== null && $deadlineChanged && Carbon::parse($deadline)->isPast()) {
            throw new BusinessRuleException("Deadline must be in the future.");
        }
    }
@@ -47,8 +52,6 @@ final class JobPostingService
            'posted_date' => Carbon::now(),
            'deadline' => $data['deadline'] ?? null,
            'is_active' => true,
-           'views' => 0,
-           'applications' => 0
        ];
 
        $jobPosting = JobPosting::create($attributes);
@@ -75,7 +78,7 @@ final class JobPostingService
        $jobPosting->is_active = $isActive;
        $jobPosting->save();
 
-       Log::info("{$action} job posting", ['id' => $jobPosting->id]);
+       Log::info("$action job posting", ['id' => $jobPosting->id]);
    }
 
    public function incrementViews(int $id) : void
@@ -116,10 +119,24 @@ final class JobPostingService
        return $jobPosting;
    }
 
-   public function getAll() : Collection
+   public function delete(int $id) : void
    {
-       return JobPosting::latest('posted_date')->get();
+       $jobPosting = JobPosting::findOrFail($id);
+
+       $jobPosting->delete();
+       Log::info("Deleted job posting", ['id' => $id]);
    }
+
+    public function getAll(?string $search = null) : LengthAwarePaginator
+    {
+        return JobPosting::query()
+            ->when($search, fn ($q) => $q->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                    ->orWhere('location', 'like', "%{$search}%");
+            }))
+            ->latest('posted_date')
+            ->paginate(10);
+    }
 
    public function getActiveJobs() : Collection
    {
@@ -141,12 +158,11 @@ final class JobPostingService
 
    public function getByLocation(string $location) : Collection
    {
-       $query = $location
-           |> trim(...)
-           |> strtolower(...)
-           |> (fn($x) => JobPosting::whereRaw('LOWER(location) = ?', [$x]));
+       $normalized = strtolower(trim($location));
 
-       return $query->latest('posted_date')->get();
+       return JobPosting::whereRaw('LOWER(location) = ?', [$normalized])
+           ->latest('posted_date')
+           ->get();
    }
 
    public function getById(int $id) : JobPosting

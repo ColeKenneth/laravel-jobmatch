@@ -52,7 +52,7 @@ trait HandlesCrud
         $this->successMessage = $message;
         $this->showSuccessModal = true;
     }
-    
+
     public function getSuccessMessageProperty(): string
     {
         return $this->successMessage;
@@ -83,6 +83,7 @@ trait HandlesCrud
         return $this->search;
     }
 
+    abstract protected function rules() : array;
     abstract protected function resetForm() : void;
     abstract protected function payload(array $data) : array;
 }

@@ -29,7 +29,7 @@ final class JobSkillService
         $attributes = [
             'job_posting_id' => $jobPostingId,
             'skill_id' => $data['skill_id'],
-            'is_required' => true,
+            'is_required' => $data['is_required'] ?? true,
             'min_proficiency_level' => $data['min_proficiency_level'] ?? null,
             'priority' => $data['priority'] ?? null,
         ];
@@ -51,9 +51,15 @@ final class JobSkillService
             ->exists();
     }
 
+    public function getById(int $id) : JobSkill
+    {
+        return JobSkill::findOrFail($id);
+    }
+
     public function getByJobPosting(int $jobPostingId) : Collection
     {
-        return JobSkill::where('job_posting_id')
+        return JobSkill::with('skill')
+            ->where('job_posting_id', $jobPostingId)
             ->orderByDesc('priority')
             ->get();
     }

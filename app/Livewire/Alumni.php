@@ -28,7 +28,6 @@ class Alumni extends Component
     public string $graduationDate = '';
     public string $currentEmployer = '';
     public string $currentPosition = '';
-    public string $successMessage = '';
 
     protected function rules(): array
     {
@@ -91,7 +90,7 @@ class Alumni extends Component
         $this->closeDeleteModal();
     }
 
-    private function resetForm() : void
+    protected function resetForm() : void
     {
         $this->reset([
             'userId',
@@ -105,7 +104,7 @@ class Alumni extends Component
         $this->resetValidation();
     }
 
-    private function payload(array $data) : array
+    protected function payload(array $data) : array
     {
         return [
             'user_id' => $data['userId'],
