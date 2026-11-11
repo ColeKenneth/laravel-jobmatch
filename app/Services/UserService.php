@@ -4,8 +4,9 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Exceptions\AlreadyExistsException;
+use App\Exceptions\BusinessRuleException;
 use App\Models\User;
-use Illuminate\Support\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -65,6 +66,8 @@ final class UserService
     {
         $user = User::findOrFail($id);
         $user->delete();
+
+        Log::info("Deleted user", ['id' => $id]);
     }
 
     public function emailExists(string $email) : bool
@@ -79,9 +82,17 @@ final class UserService
         return User::where('id', $id)->exists();
     }
 
-    public function getAll() : Collection
+    public function getAll(?string $search = null) : LengthAwarePaginator
     {
-        return User::orderByDesc('last_name')->get();
+        return User::query()
+            ->when($search, fn ($q) => $q->where(function ($q) use ($search) {
+                $q->where('first_name', 'like', "%{$search}%")
+                    ->orWhere('last_name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
+            }))
+            ->orderBy('last_name')
+            ->orderBy('first_name')
+            ->paginate(10);
     }
 
     public function getByEmail(string $email) : User
@@ -109,6 +120,10 @@ final class UserService
         }
 
         $user = $this->getById($id);
+
+        if ($user->role->value !== trim($data['role'])) {
+            throw new BusinessRuleException("A user's role cannot be changed after creation.");
+        }
 
         $user->fill([
             'first_name' => trim($data['first_name']),

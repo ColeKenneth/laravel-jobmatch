@@ -29,7 +29,7 @@ final class StudentSkillService
         $attributes = [
             'student_id' => $studentId,
             'skill_id' => $data['skill_id'],
-            'proficiency_level' => 1,
+            'proficiency_level' => $data['proficiency_level'] ?? 1,
             'years_of_experience' => $data['years_of_experience'] ?? null
         ];
 
@@ -50,18 +50,16 @@ final class StudentSkillService
 
     public function getByStudent(int $studentId) : Collection
     {
-         return StudentSkill::where('student_id', $studentId)
-             ->orderByDesc('years_of_experience')
-             ->get();
+        return StudentSkill::with('skill')
+            ->where('student_id', $studentId)
+            ->orderByDesc('years_of_experience')
+            ->get();;
     }
 
     public function removeAllForStudent(int $studentId) : void
     {
-        $deletedCount = StudentSkill::where('student_id', $studentId)->delete();
-
-        if ($deletedCount === 0) {
-            StudentSkill::findOrFail($studentId);
-        }
+        Student::findOrFail($studentId);
+        StudentSkill::where('student_id', $studentId)->delete();
 
         Log::info("Removed all skills for student", ['student_id' => $studentId]);
     }
@@ -78,7 +76,7 @@ final class StudentSkillService
     {
         $studentSkill = StudentSkill::findOrFail($id);
 
-        if (!empty($data['student_id']) && $data['student_id'] !== $studentSkill->student_id) {
+        if (!empty($data['student_id']) && (int) $data['student_id'] !== (int) $studentSkill->student_id) {
             throw new BusinessRuleException("Cannot reassign student skill to a different student.");
         }
 

@@ -10,6 +10,7 @@ use App\Models\JobPosting;
 use App\Models\PlacementRecord;
 use App\Models\Student;
 use Carbon\Carbon;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
@@ -58,6 +59,22 @@ final class PlacementService
     public function exists(int $id) : bool
     {
         return PlacementRecord::where('id', $id)->exists();
+    }
+
+    public function getAll(?string $search = null) : LengthAwarePaginator
+    {
+        return PlacementRecord::query()
+            ->with(['student', 'jobPosting'])
+            ->when($search, fn ($q) => $q->where(function ($q) use ($search){
+                $q->where('notes', 'like', "%{$search}%");
+            }))
+            ->latest('placement_date')
+            ->paginate(10);
+    }
+
+    public function getById(int $id) : PlacementRecord
+    {
+        return PlacementRecord::findOrFail($id);
     }
 
     public function getByJobPosting(int $jobPosting) : Collection

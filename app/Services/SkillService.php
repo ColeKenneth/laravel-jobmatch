@@ -6,6 +6,8 @@ namespace App\Services;
 use App\Enum\Category;
 use App\Exceptions\AlreadyExistsException;
 use App\Models\Skill;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
@@ -13,14 +15,15 @@ final class SkillService
 {
     public function create(array $data) : Skill
     {
-        $exists = Skill::where('name', $data['name'])->exists();
+        $name = trim($data['name']);
+        $exists = Skill::where('name', $name)->exists();
 
         if ($exists) {
             throw new AlreadyExistsException("Skill {$data['name']} already exists.");
         }
 
         $attributes = [
-            'name' => trim($data['name']),
+            'name' => $name,
             'category' => trim($data['category']),
             'ontology_id' => isset($data['ontology_id']) ? trim($data['ontology_id']) : null,
             'icon_url' => isset($data['icon_url']) ? trim($data['icon_url']) : null,
@@ -46,9 +49,15 @@ final class SkillService
         return Skill::where('id', $id)->exists();
     }
 
-    public function getAll() : Collection
+    public function getAll(?string $search = null) : LengthAwarePaginator
     {
-        return Skill::orderByDesc('name')->get();
+        return Skill::query()
+            ->when($search, fn ($q) => $q->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('category', 'like', "%{$search}%");
+            }))
+            ->orderBy('name')
+            ->paginate(10);
     }
 
     public function getByCategory(Category $category) : Collection
@@ -65,18 +74,19 @@ final class SkillService
 
     public function getByName(string $name) : Skill
     {
-        return Skill::findOrFail($name);
+        return Skill::where('name', $name)->firstOrFail();
     }
 
     public function update(int $id, string $name, array $data) : Skill
     {
-        $exists = Skill::where('name', $name)->exists();
+        $skill = Skill::findOrFail($id);
+        $name = trim($data['name']);
+
+        $exists = Skill::where('name', $name)->where('id', '!=', $id)->exists();
 
         if ($exists) {
             throw new AlreadyExistsException("Skill $name already exists.");
         }
-
-        $skill = Skill::findOrFail($id);
 
         $skill->fill([
             'name' => trim($data['name']),
