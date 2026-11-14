@@ -27,10 +27,6 @@
                 .edu.ph
             </a>
             <a href="{{ route('about') }}#campus-location">Open campus map ↗</a>
-            <button class="footer-install" type="button" data-install-app>
-                <x-jobmatch-icon name="download"/>
-                Install JobMatchAI
-            </button>
         </div>
     </div>
     <div class="footer-bottom">

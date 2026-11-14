@@ -1653,64 +1653,13 @@ body.stitch-ui h3 {
     margin-top: auto;
 }
 
-.stitch-ui .footer-install {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    border: 1px solid #ffffff42;
-    border-radius: 8px;
-    background: #ffffff0d;
-    padding: 9px 13px;
-    cursor: pointer;
-    font-size: 12px;
-    margin-top: 6px;
-    align-self: flex-start;
-    width: fit-content;
-}
 
-.footer-install .jm-icon {
-    width: 16px;
-    height: 16px;
-}
 
-.install-dialog {
-    border: 1px solid var(--jm-line);
-    border-radius: 18px;
-    box-shadow: 0 24px 80px #00285b36;
-    padding: 32px;
-    max-width: min(460px,calc(100vw - 32px));
-    color: var(--jm-ink);
-}
 
-.install-dialog::backdrop {
-    background: #001a4077;
-    backdrop-filter: blur(3px);
-}
 
-.install-dialog h2 {
-    font-size: 24px;
-    margin: 18px 0 12px;
-}
 
-.install-dialog p {
-    font-size: 14px;
-    line-height: 1.8;
-}
 
-.install-dialog .dialog-close {
-    position: absolute;
-    right: 16px;
-    top: 12px;
-    background: none;
-    border: 0;
-    font-size: 27px;
-    color: #617086;
-    cursor: pointer;
-}
 
-.install-dialog .muted {
-    font-size: 12px;
-}
 
 @media(hover:hover) {
     .stitch-ui .button:hover {
@@ -2383,9 +2332,7 @@ body.stitch-ui h3 {
         margin: 16px;
         padding: 14px;
     }
-    .stitch-ui .footer-install {
-        min-height: 44px;
-    }
+
     .stitch-ui .site-footer {
         padding-bottom: env(safe-area-inset-bottom,0px);
     }
