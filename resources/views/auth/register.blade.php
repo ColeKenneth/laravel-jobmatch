@@ -1,81 +1,78 @@
-<x-guest-layout>
-    <x-authentication-card>
-        <x-slot name="logo">
-            <x-authentication-card-logo />
-        </x-slot>
-
-        <x-validation-errors class="mb-4" />
-
-        <form method="POST" action="{{ route('register') }}">
-            @csrf
-
-            <div>
-                <x-label for="first_name" value="{{ __('First Name') }}" />
-                <x-input id="first_name" class="block mt-1 w-full" type="text" name="first_name" :value="old('first_name')" required autofocus autocomplete="given-name" />
-            </div>
-
-            <div class="mt-4">
-                <x-label for="middle_name" value="{{ __('Middle Name (Optional)') }}" />
-                <x-input id="middle_name" class="block mt-1 w-full" type="text" name="middle_name" :value="old('middle_name')" autocomplete="additional-name" />
-            </div>
-
-            <div class="mt-4">
-                <x-label for="last_name" value="{{ __('Last Name') }}" />
-                <x-input id="last_name" class="block mt-1 w-full" type="text" name="last_name" :value="old('last_name')" required autocomplete="family-name" />
-            </div>
-
-            <div class="mt-4">
-                <x-label for="role" value="{{ __('Account Type') }}" />
-                <select id="role" name="role" required class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                    <option value="" disabled @selected(old('role') === null)>{{ __('Select an account type') }}</option>
-                    <option value="student" @selected(old('role') === 'student')>{{ __('Student') }}</option>
-                    <option value="alumni" @selected(old('role') === 'alumni')>{{ __('Alumni') }}</option>
-                    <option value="employer" @selected(old('role') === 'employer')>{{ __('Employer') }}</option>
-                    <option value="placement_officer" @selected(old('role') === 'placement_officer')>{{ __('Placement Officer') }}</option>
-                </select>
-            </div>
-
-            <div class="mt-4">
-                <x-label for="email" value="{{ __('Email') }}" />
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            </div>
-
-            <div class="mt-4">
-                <x-label for="password" value="{{ __('Password') }}" />
-                <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
-            </div>
-
-            <div class="mt-4">
-                <x-label for="password_confirmation" value="{{ __('Confirm Password') }}" />
-                <x-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required autocomplete="new-password" />
-            </div>
-
-            @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
-                <div class="mt-4">
-                    <x-label for="terms">
-                        <div class="flex items-center">
-                            <x-checkbox name="terms" id="terms" required />
-
-                            <div class="ms-2">
-                                {!! __('I agree to the :terms_of_service and :privacy_policy', [
-                                        'terms_of_service' => '<a target="_blank" href="'.route('terms.show').'" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">'.__('Terms of Service').'</a>',
-                                        'privacy_policy' => '<a target="_blank" href="'.route('policy.show').'" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">'.__('Privacy Policy').'</a>',
-                                ]) !!}
-                            </div>
+<x-jobmatch-layout title="Register">
+    <section class="campus-split">
+        <div class="campus-photo" role="img" aria-label="World Citi Colleges campus"></div>
+        <div class="campus-content auth-content">
+            <h1>Join WCC JobMatchAI · Create Your Account</h1>
+            @if(!in_array(request('type'),['student','alumni','employer'],true))
+                <section class="card registration-choice">
+                    <h2>Select your account type to begin:</h2>
+                    <div class="choice-grid">
+                        <div>
+                            <span aria-hidden="true">🎓</span>
+                            <h2>Student / Alumni</h2>
+                            <p>Register as a WCC student or graduate.</p>
+                            <a class="button" href="{{ route('register',['type'=>'student']) }}">Create Student Account</a>
+                            <a class="text-button" href="{{ route('register',['type'=>'alumni']) }}">Register as Alumni</a>
                         </div>
-                    </x-label>
-                </div>
+                        <div>
+                            <span aria-hidden="true">▦</span>
+                            <h2>Employer</h2>
+                            <p>Register as a recruiter / company.</p>
+                            <a class="button" href="{{ route('register',['type'=>'employer']) }}">Create Employer Account</a>
+                        </div>
+                    </div>
+                </section>
+            @else
+                <section class="card auth-card registration-form">
+                    <a href="{{ route('register') }}">← Choose account type</a>
+                    <h2>{{ ucfirst(request('type')) }} Registration</h2>
+                    <form class="form-grid" method="POST" action="{{ route('register',['type'=>request('type')]) }}">
+                        @csrf
+                        <input type="hidden" name="role" value="{{ request('type') }}">
+                        <label>
+                            First name
+                            <input name="first_name" value="{{ old('first_name') }}" required maxlength="100" autocomplete="given-name">
+                        </label>
+                        <label>
+                            Last name
+                            <input name="last_name" value="{{ old('last_name') }}" required maxlength="100" autocomplete="family-name">
+                        </label>
+                        <label>
+                            Middle name (optional)
+                            <input name="middle_name" value="{{ old('middle_name') }}" maxlength="100" autocomplete="additional-name">
+                        </label>
+                        <label>
+                            Email
+                            <input name="email" type="email" value="{{ old('email') }}" required autocomplete="email">
+                        </label>
+                        <label>
+                            Password
+                            <input type="password" name="password" required autocomplete="new-password">
+                        </label>
+                        <label>
+                            Confirm password
+                            <input type="password" name="password_confirmation" required autocomplete="new-password">
+                        </label>
+                        @if(Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
+                            <label class="check-label full">
+                                <input type="checkbox" name="terms" value="1" required>
+                                I agree to the
+                                <a href="{{ route('terms.show') }}">Terms of Service</a>
+                                and
+                                <a href="{{ route('policy.show') }}">Privacy Policy</a>
+                                .
+                            </label>
+                        @endif
+                        <div class="form-actions">
+                            <button class="button stretch">Create Account</button>
+                        </div>
+                    </form>
+                </section>
             @endif
-
-            <div class="flex items-center justify-end mt-4">
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
-                    {{ __('Already registered?') }}
-                </a>
-
-                <x-button class="ms-4">
-                    {{ __('Register') }}
-                </x-button>
-            </div>
-        </form>
-    </x-authentication-card>
-</x-guest-layout>
+            <p>
+                Already have an account?
+                <a href="{{ route('login') }}">Login</a>
+            </p>
+        </div>
+    </section>
+</x-jobmatch-layout>

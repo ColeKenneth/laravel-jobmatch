@@ -1,0 +1,464 @@
+{
+  "employers": [
+    {
+      "id": "medical",
+      "name": "World Citi Medical Center",
+      "location": "Aurora Blvd, QC (Campus Adjacent)",
+      "industry": "Healthcare & Tertiary Clinical Medicine",
+      "category": "healthcare",
+      "badge": "WCC Sister Institution",
+      "credential": "Tertiary Level 3 Hospital",
+      "count": 14,
+      "benefit": "Fast-Track Hiring",
+      "roles": [
+        "Pediatric Staff Nurse",
+        "Medical Technologist",
+        "ICU Resident",
+        "Clinical Pharmacist"
+      ],
+      "programs": [
+        "BS Nursing",
+        "BS Medical Technology",
+        "BS Radiologic Tech"
+      ]
+    },
+    {
+      "id": "orangeapps",
+      "name": "OrangeApps Inc.",
+      "location": "East Avenue, Quezon City",
+      "industry": "Educational Technology & Cloud Software",
+      "category": "it",
+      "badge": "Verified EdTech Partner",
+      "credential": "SaaS & University Cloud",
+      "count": 8,
+      "benefit": "Alumni Mentorship",
+      "roles": [
+        "Frontend React Developer",
+        "Backend Node.js Engineer",
+        "UI/UX Product Designer"
+      ],
+      "programs": [
+        "BS Information Technology",
+        "BS Computer Science"
+      ]
+    },
+    {
+      "id": "aviation",
+      "name": "WCC Aviation Academy",
+      "location": "Binalonan Airfield & QC Campus",
+      "industry": "Aviation, Pilot Training & Aerospace Logistics",
+      "category": "aviation",
+      "badge": "WCC Network Partner",
+      "credential": "ATO & CAAP Certified",
+      "count": 6,
+      "benefit": "Simulator & Fleet",
+      "roles": [
+        "Flight Dispatcher",
+        "Aviation Safety Inspector",
+        "Avionics Technician"
+      ],
+      "programs": [
+        "BS Aeronautical Engineering",
+        "BS Aviation Management"
+      ]
+    },
+    {
+      "id": "stlukes",
+      "name": "St. Luke's Medical Center",
+      "location": "E. Rodriguez Sr. Ave, Quezon City",
+      "industry": "Healthcare & Specialized Surgery",
+      "category": "healthcare",
+      "badge": "Affiliated Practicum Partner",
+      "credential": "JCI-Accredited Hospital",
+      "count": 12,
+      "benefit": "Direct Practicum Transition",
+      "roles": [
+        "Clinical Care Specialist",
+        "Patient Triage Officer",
+        "ER Registered Nurse"
+      ],
+      "programs": [
+        "BS Nursing",
+        "BS Physical Therapy"
+      ]
+    },
+    {
+      "id": "fintech",
+      "name": "FinTech Solutions Manila",
+      "location": "Ortigas Center, Pasig / Hybrid",
+      "industry": "Financial Technology & Micro-lending",
+      "category": "business",
+      "badge": "Verified Corporate Partner",
+      "credential": "BSP Licensed Issuer",
+      "count": 5,
+      "benefit": "Hybrid Setup",
+      "roles": [
+        "Junior Data Analyst",
+        "Risk Assurance Associate",
+        "FinOps Trainee"
+      ],
+      "programs": [
+        "BS Business Admin",
+        "BS Information Technology"
+      ]
+    },
+    {
+      "id": "rehab",
+      "name": "Metro Health Rehab",
+      "location": "Katipunan Ave, Quezon City",
+      "industry": "Physical Therapy & Rehabilitation Medicine",
+      "category": "healthcare",
+      "badge": "Clinical Practicum Partner",
+      "credential": "Sports & Neurological Rehab",
+      "count": 4,
+      "benefit": "Internship Credits",
+      "roles": [
+        "Physical Therapist Assistant",
+        "Sports Rehab Aide",
+        "Clinical Documentation Lead"
+      ],
+      "programs": [
+        "BS Physical Therapy",
+        "BS Nursing"
+      ]
+    }
+  ],
+  "jobs": [
+    {
+      "id": "pediatric",
+      "title": "Pediatric Staff Nurse",
+      "employer": "medical",
+      "category": "healthcare",
+      "match": 98,
+      "salary": "₱32,000 - ₱42,000",
+      "minimum": 32000,
+      "type": "Full-Time",
+      "experience": "entry",
+      "location": "Quezon City (Adjacent Campus)",
+      "posted": "2h ago",
+      "badge": "Affiliated Hospital",
+      "description": "Deliver compassionate clinical care to pediatric inpatients. Candidates with Bachelor of Science in Nursing from WCC receive priority pathway directly through the sister-institution residency board.",
+      "tags": [
+        "BSN Required",
+        "PRC RN Board",
+        "Pediatric BLS"
+      ],
+      "perk": "hazard pay"
+    },
+    {
+      "id": "frontend",
+      "title": "Frontend Developer (React / Next.js)",
+      "employer": "orangeapps",
+      "category": "it",
+      "match": 95,
+      "salary": "₱45,000 - ₱65,000",
+      "minimum": 45000,
+      "type": "Full-Time",
+      "experience": "entry",
+      "location": "Quezon City (East Avenue)",
+      "posted": "5h ago",
+      "badge": "Hybrid",
+      "description": "Collaborate on the next iteration of Southeast Asia's academic cloud software. Looking for WCC BSIT or Computer Science graduates proficient with modern JavaScript, Tailwind styling, and RESTful APIs.",
+      "tags": [
+        "BSIT / BSCS",
+        "React",
+        "Next.js",
+        "Tailwind CSS"
+      ],
+      "perk": "HMO 1st day"
+    },
+    {
+      "id": "flight",
+      "title": "Flight Operations Assistant",
+      "employer": "aviation",
+      "category": "aviation",
+      "match": 91,
+      "salary": "₱28,000 - ₱36,000",
+      "minimum": 28000,
+      "type": "Full-Time",
+      "experience": "entry",
+      "location": "Pasay Hub / QC Admin Office",
+      "posted": "1d ago",
+      "badge": "WCC Network Partner",
+      "description": "Coordinate dispatch logs, flight manifest schedules, and pilot briefing packages. Tailored for graduates of WCC Aeronautical Engineering or Aviation/Tourism Management programs.",
+      "tags": [
+        "Tourism & Aviation",
+        "Flight Dispatch",
+        "CAAP Safety Regs"
+      ],
+      "perk": ""
+    },
+    {
+      "id": "counselor",
+      "title": "Academic Guidance Counselor",
+      "employer": "medical",
+      "company": "World Citi Colleges Quezon City",
+      "category": "education",
+      "match": 88,
+      "salary": "₱30,000 - ₱38,000",
+      "minimum": 30000,
+      "type": "Full-Time",
+      "experience": "mid",
+      "location": "On-site Aurora Blvd Campus",
+      "posted": "2d ago",
+      "badge": "Campus Institution",
+      "description": "Support student mental wellness and career counseling programs within the student affairs department. Open to WCC BS Psychology and Master of Arts in Education alumni.",
+      "tags": [
+        "Psychology / Education",
+        "Student Advising",
+        "Registered Psychometrician"
+      ],
+      "perk": "Education Perks"
+    },
+    {
+      "id": "analyst",
+      "title": "Junior Data Analyst",
+      "employer": "fintech",
+      "category": "business",
+      "match": 87,
+      "salary": "₱40,000 - ₱55,000",
+      "minimum": 40000,
+      "type": "Full-Time",
+      "experience": "entry",
+      "location": "Remote (BGC / Ortigas HQ)",
+      "posted": "3d ago",
+      "badge": "100% Remote",
+      "description": "Transform transactional micro-lending data into actionable intelligence dashboards using Power BI and Python. Ideal for WCC graduates with strong quantitative backgrounds.",
+      "tags": [
+        "SQL & PostgreSQL",
+        "Python (Pandas)",
+        "Power BI"
+      ],
+      "perk": "Internet Subsidy"
+    },
+    {
+      "id": "therapist",
+      "title": "Physical Therapist Assistant",
+      "employer": "rehab",
+      "category": "healthcare",
+      "match": 93,
+      "salary": "₱28,000 - ₱35,000",
+      "minimum": 28000,
+      "type": "Full-Time",
+      "experience": "internship",
+      "location": "Quezon City (Katipunan Ave)",
+      "posted": "3d ago",
+      "badge": "Allied Health Track",
+      "description": "Assist licensed Physical Therapists in guiding neurological and post-surgical rehab patients through prescribed movement regimens. Accredited clinical practicum hours recognized.",
+      "tags": [
+        "BSPT Candidate / RN",
+        "Patient Rehab",
+        "Orthopedic Support"
+      ],
+      "perk": ""
+    }
+  ],
+  "skills": [
+    {
+      "id": "pediatric",
+      "title": "Pediatric Resuscitation & BLS",
+      "subtitle": "Clinical Life Support & Acute Care",
+      "college": "College of Nursing",
+      "category": "healthcare",
+      "badge": "High Demand",
+      "course": "NUR-302: Pediatric Nursing",
+      "practice": "40 Clinical RLE Lab Hours",
+      "openings": 142,
+      "salary": "₱36,000 - ₱52,000/mo",
+      "partners": [
+        "World Citi Med",
+        "St. Luke's QC",
+        "Philippine Heart Ctr"
+      ]
+    },
+    {
+      "id": "react",
+      "title": "React & Next.js Architecture",
+      "subtitle": "Frontend Cloud Engineering",
+      "college": "College of IT",
+      "category": "it",
+      "badge": "High Demand",
+      "course": "ITE-204: Fullstack Web Dev",
+      "practice": "Capstone System Integration",
+      "openings": 198,
+      "salary": "₱45,000 - ₱75,000/mo",
+      "partners": [
+        "OrangeApps EdTech",
+        "Accenture PH",
+        "Globe Fintech"
+      ]
+    },
+    {
+      "id": "flight",
+      "title": "Flight Dispatch & Flight Planning",
+      "subtitle": "ICAO Navigation & Aircraft Dispatch",
+      "college": "College of Aviation",
+      "category": "aviation",
+      "badge": "CAAP Licensure",
+      "course": "AVM-401: Air Traffic & Dispatch",
+      "practice": "Simulator Flight Ops Certified",
+      "openings": 86,
+      "salary": "₱42,000 - ₱68,000/mo",
+      "partners": [
+        "Cebu Pacific Air",
+        "Philippine Airlines",
+        "AirSWIFT"
+      ]
+    },
+    {
+      "id": "iv",
+      "title": "IV Therapy & Venipuncture",
+      "subtitle": "ANSAP Standards & Fluid Admin",
+      "college": "College of Nursing",
+      "category": "healthcare",
+      "badge": "High Demand",
+      "course": "NUR-210: Fundamentals of Nursing",
+      "practice": "Clinical Hospital Practicum",
+      "openings": 165,
+      "salary": "₱32,000 - ₱48,000/mo",
+      "partners": [
+        "World Citi Med QC",
+        "De Los Santos Med",
+        "Metro North Med"
+      ]
+    },
+    {
+      "id": "finance",
+      "title": "Financial Statement Analysis",
+      "subtitle": "Corporate Audit & Tax Review",
+      "college": "College of Business",
+      "category": "business",
+      "badge": "Essential",
+      "course": "ACC-301: Financial Accounting",
+      "practice": "BIR Regulation & IFRS",
+      "openings": 120,
+      "salary": "₱35,000 - ₱58,000/mo",
+      "partners": [
+        "SGV & Co.",
+        "BDO Unibank",
+        "P&A Grant Thornton"
+      ]
+    },
+    {
+      "id": "python",
+      "title": "Python Data Analytics & ETL",
+      "subtitle": "Pandas, Scikit, Business BI",
+      "college": "College of IT",
+      "category": "it",
+      "badge": "Emerging AI",
+      "course": "CSC-312: Applied Data Science",
+      "practice": "Statistical Modeling Project",
+      "openings": 154,
+      "salary": "₱48,000 - ₱78,000/mo",
+      "partners": [
+        "IBM Philippines",
+        "Maya Bank",
+        "SM Prime Holdings"
+      ]
+    },
+    {
+      "id": "phlebotomy",
+      "title": "Phlebotomy & Specimen Handling",
+      "subtitle": "Diagnostics, Biohazard Containment",
+      "college": "Allied Health Sciences",
+      "category": "healthcare",
+      "badge": "MedTech Mapped",
+      "course": "MLS-202: Clinical Laboratory Sci",
+      "practice": "Safety & Sterilization Practicum",
+      "openings": 118,
+      "salary": "₱28,000 - ₱42,000/mo",
+      "partners": [
+        "Hi-Precision QC",
+        "World Citi Med",
+        "The Medical City"
+      ]
+    },
+    {
+      "id": "icao",
+      "title": "ICAO Safety & Ramp Operations",
+      "subtitle": "Ground Handling & Weight/Balance",
+      "college": "College of Aviation",
+      "category": "aviation",
+      "badge": "Safety Ops",
+      "course": "AVM-308: Ground Operations Mgmt",
+      "practice": "Tarmac Safety Cert. Module",
+      "openings": 74,
+      "salary": "₱34,000 - ₱50,000/mo",
+      "partners": [
+        "Dnata Philippines",
+        "MacroAsia Corp",
+        "PAL Express"
+      ]
+    }
+  ],
+  "featuredJobs": [
+    {
+      "id": "featured-software",
+      "title": "Junior Software Engineer",
+      "company": "World Citi Colleges / Tech Partner",
+      "employer": "orangeapps",
+      "salary": "₱35,000 – ₱48,000",
+      "category": "it",
+      "match": 96,
+      "location": "Quezon City, Aurora Blvd",
+      "type": "Full-Time • Hybrid",
+      "tags": [
+        "Python",
+        "React",
+        "PostgreSQL"
+      ],
+      "description": "Sample software-engineering opportunity featured in the WCC JobMatchAI home design."
+    },
+    {
+      "id": "featured-registrar",
+      "title": "Registrar Assistant",
+      "company": "WCC Academic Affairs",
+      "employer": "medical",
+      "salary": "₱22,000 – ₱28,000",
+      "category": "education",
+      "match": 92,
+      "location": "QC Campus, Admin Hall",
+      "type": "Full-Time • On-site",
+      "tags": [
+        "Student Records",
+        "Administration",
+        "SIS Database"
+      ],
+      "description": "Sample academic-administration opportunity featured in the WCC JobMatchAI home design."
+    },
+    {
+      "id": "featured-head-nurse",
+      "title": "Head Nurse / Instructor",
+      "company": "World Citi Medical Center",
+      "employer": "medical",
+      "salary": "₱42,000 – ₱56,000",
+      "category": "healthcare",
+      "match": 98,
+      "location": "Quezon City Medical Complex",
+      "type": "Full-Time • Hospital Shift",
+      "tags": [
+        "BSN Degree",
+        "PRC Licensed",
+        "Clinical ICU"
+      ],
+      "description": "Sample clinical-instruction opportunity featured in the WCC JobMatchAI home design."
+    },
+    {
+      "id": "featured-marketing",
+      "title": "Marketing Associate",
+      "company": "Aviation & Tourism Dept",
+      "employer": "aviation",
+      "salary": "₱25,000 – ₱33,000",
+      "category": "business",
+      "match": 89,
+      "location": "Quezon City Campus",
+      "type": "Full-Time • Flexible",
+      "tags": [
+        "Social Media",
+        "Event Mgmt",
+        "Copywriting"
+      ],
+      "description": "Sample marketing opportunity featured in the WCC JobMatchAI home design."
+    }
+  ]
+}

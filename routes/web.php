@@ -3,20 +3,19 @@
 use App\Livewire\Alumni;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
+// The admin area is restricted to active administrators, including direct URL access.
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
-});
-
-Route::middleware(['role:admin'])->prefix('admin')->group(function () {
+    'role:admin',
+])->prefix('admin')->group(function () {
     Route::get('/alumni', Alumni::class)->name('admin.alumni');
 });
+
+require __DIR__.'/jobmatch.php';
+
+// Redirect legacy URLs to the current pages.
+foreach (['home' => '/', 'jobs' => '/jobs', 'skills' => '/skills', 'employers' => '/employers', 'about' => '/about', 'register' => '/register', 'forgot' => '/forgot-password'] as $old => $current) {
+    Route::redirect('/design-preview/'.$old, $current);
+}
+Route::redirect('/design-preview', '/');

@@ -1,0 +1,95 @@
+/* Figma login: desktop 1:17319, mobile 1:20906. Scoped to avoid changing other screens. */
+.jm-login { --jm-ink: #001026; --jm-navy: #0b2545; --jm-gold: #7c5800; --jm-muted: #44474e; --jm-surface: #f2f3ff; box-sizing: border-box; min-height: 100svh; padding: 125px 32px; display: flex; align-items: center; justify-content: center; background: #faf8ff; color: var(--jm-ink); font: 400 12px/1.5 'Plus Jakarta Sans', sans-serif; }
+.jm-login *, .jm-login *::before, .jm-login *::after { box-sizing: border-box; }
+.jm-login a { color: var(--jm-gold); text-decoration: none; }
+.jm-login a:hover { text-decoration: underline; }
+.jm-login button, .jm-login input { font: inherit; }
+.jm-login button { cursor: pointer; }
+.jm-login :focus-visible { outline: 3px solid #b28112; outline-offset: 3px; }
+.jm-login .jm-mobile { display: none; }
+.jm-login-shell { width: 100%; max-width: 448px; background: #fff; border-radius: 12px; padding: 24px; box-shadow: 0 20px 25px -5px #0000001a, 0 8px 10px -6px #0000001a, 0 12px 16px #0b25451f; }
+.jm-login .jm-icon { flex: none; display: block; max-width: none; object-fit: contain; }
+.jm-login .jm-icon.jm-mobile { display: none; }
+.jm-login-intro { text-align: center; }
+.jm-campus-pill { display: inline-flex; align-items: center; gap: 4px; border-radius: 99px; background: var(--jm-surface); padding: 4px 12px; font-size: 10px; font-weight: 700; letter-spacing: .3px; }
+.jm-campus-pill b { background: #ffbe3b; color: #6f4e00; border-radius: 99px; padding: 1px 6px; font-size: 10px; }
+.jm-login h1 { margin: 8px 0 4px; font-size: 24px; line-height: 32px; font-weight: 600; letter-spacing: -.36px; }
+.jm-login-intro > p { margin: 0 auto; max-width: 300px; font-size: 12px; line-height: 18px; color: var(--jm-muted); }
+.jm-role-switcher { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; border-radius: 8px; background: var(--jm-surface); padding: 4px; margin-top: 16px; }
+.jm-role-switcher button { border: 0; background: transparent; border-radius: 8px; padding: 8px 4px; display: flex; align-items: center; justify-content: center; gap: 6px; color: var(--jm-muted); font-size: 13px; font-weight: 600; min-height: 34px; }
+.jm-role-switcher button.is-active { background: var(--jm-navy); color: #fff; box-shadow: 0 1px 2px #0000000d; }
+.jm-role-switcher button.is-active .jm-icon { filter: brightness(0) invert(1); }
+.jm-role-help { display: flex; gap: 6px; align-items: center; margin: 6px 8px 16px; color: var(--jm-muted); }
+.jm-form { display: grid; gap: 16px; }
+.jm-field label { display: flex; justify-content: space-between; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: #131b2e; }
+.jm-field-tag { font-size: 10px; font-weight: 700; color: var(--jm-gold); background: #ffdea880; padding: 2px 8px; border-radius: 99px; }
+.jm-field-heading { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.jm-field-heading a { font-size: 11px; font-weight: 700; }
+.jm-input-wrap { position: relative; margin-top: 4px; }
+.jm-input-wrap > .jm-icon { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); pointer-events: none; }
+.jm-login .jm-input { width: 100%; height: 44px; border: 1px solid #e8e8ef; border-radius: 8px; padding: 12px 12px 12px 36px; color: #131b2e; background: #fff; font-size: 14px; box-shadow: 0 1px 2px #0000000d; }
+.jm-login .jm-input::placeholder { color: #74777f; opacity: 1; }
+.jm-login .jm-password-input { padding-right: 44px; }
+.jm-show-password { position: absolute; right: 2px; top: 0; width: 44px; height: 44px; border: 0; background: transparent; display: flex; align-items: center; justify-content: center; border-radius: 8px; }
+.jm-remember { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; padding-top: 2px; }
+.jm-login .jm-remember input { width: 16px; height: 16px; border-radius: 3px; color: var(--jm-navy); }
+.jm-submit { width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; border: 0; border-radius: 8px; padding: 12px 16px; background: var(--jm-navy); color: #fff; font-size: 16px !important; font-weight: 600 !important; box-shadow: 0 4px 6px -1px #0000001a; }
+.jm-submit:hover { background: #163b65; }
+.jm-sso-divider { display: flex; align-items: center; gap: 12px; margin: 20px 0 10px; color: #74777f; font-size: 10px; font-weight: 700; letter-spacing: .55px; }
+.jm-sso-divider::before, .jm-sso-divider::after { content: ''; height: 1px; background: #e2e7ff; flex: 1; }
+.jm-sso-options { display: grid; gap: 8px; }
+.jm-sso-options button { display: flex; align-items: center; justify-content: center; gap: 10px; background: var(--jm-surface); border: 0; border-radius: 8px; padding: 10px 12px; min-height: 38px; color: #131b2e; font-size: 12px; font-weight: 600; cursor: not-allowed; }
+.jm-sso-options button span { min-width: 0; overflow-wrap: anywhere; }
+.jm-availability { color: #74777f; font-size: 10px; text-align: center; margin: 7px 0 0; }
+.jm-register { margin: 16px 0; text-align: center; color: var(--jm-muted); }
+.jm-register a { font-size: 13px; font-weight: 600; margin-left: 3px; }
+.jm-trust-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; background: var(--jm-surface); padding: 10px 8px; border-radius: 8px; color: var(--jm-muted); text-align: center; }
+.jm-trust-row > div { display: flex; flex-direction: column; align-items: center; font-size: 11px; line-height: 14px; }
+.jm-trust-row .jm-icon { margin-bottom: 4px; }
+.jm-trust-row strong { font-weight: 700; }
+.jm-institution { font-size: 10px; font-weight: 700; text-align: center; color: #74777f; margin: 16px 0 0; }
+.jm-errors { padding: 12px; margin-bottom: 16px; background: #fff1f2; border-radius: 8px; }
+.jm-status { background: #ecfdf5; padding: 12px; margin-bottom: 16px; border-radius: 8px; }
+@media (max-width: 639px) {
+    .jm-login { display: block; padding: 76px 16px 32px; font-size: 14px; }
+    .jm-login .jm-desktop, .jm-login .jm-icon.jm-desktop { display: none; }
+    .jm-login .jm-mobile { display: flex; }
+    .jm-login .jm-icon.jm-mobile { display: block; }
+    .jm-login-shell { max-width: 448px; margin: auto; padding: 0; background: transparent; box-shadow: none; border-radius: 0; }
+    .jm-login .jm-mobile-header { position: absolute; top: 0; left: 0; right: 0; height: 64px; align-items: center; justify-content: center; box-shadow: 0 1px 8px #0000000a; background: #faf8ffd9; }
+    .jm-back { position: absolute; left: 16px; top: 10px; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; }
+    .jm-brand { display: flex; align-items: center; gap: 8px; color: var(--jm-ink) !important; }
+    .jm-brand-mark { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 8px; background: var(--jm-navy); color: #ffbe3b; font-size: 20px; font-weight: 600; }
+    .jm-brand strong { display: block; font-size: 16px; line-height: 16px; }
+    .jm-brand small { display: block; font-size: 11px; line-height: 11px; font-weight: 700; letter-spacing: .55px; color: var(--jm-gold); }
+    .jm-brand small span { color: var(--jm-ink); }
+    .jm-login .jm-campus-pill.jm-mobile { display: inline-flex; background: #e2e7ff; font-size: 11px; gap: 6px; }
+    .jm-campus-pill i { width: 6px; height: 6px; background: var(--jm-gold); border-radius: 99px; }
+    .jm-login h1 { font-weight: 700; letter-spacing: -.6px; margin-top: 12px; }
+    .jm-login-intro > p { font-size: 14px; line-height: 22px; max-width: 358px; }
+    .jm-role-switcher { margin-top: 16px; border-radius: 12px; }
+    .jm-role-switcher button { min-height: 34px; }
+    .jm-role-switcher button.is-active { background: var(--jm-ink); }
+    .jm-form-card { padding: 20px 16px 16px; margin-top: 16px; background: #fff; border-radius: 12px; box-shadow: 0 2px 3px #0b254512; }
+    .jm-form { gap: 18px; }
+    .jm-login .jm-input { background: var(--jm-surface); border-color: transparent; box-shadow: none; }
+    .jm-field-tag { background: transparent; font-weight: 400; font-size: 11px; padding: 0; }
+    .jm-field-heading a { font-size: 12px; font-weight: 400; }
+    .jm-input-help { align-items: flex-start; gap: 6px; color: var(--jm-muted); font-size: 12px; line-height: 18px; margin: 8px 0 0; }
+    .jm-input-help .jm-icon { margin-top: 3px; }
+    .jm-remember { font-weight: 400; font-size: 13px; }
+    .jm-login .jm-remember input { width: 18px; height: 18px; }
+    .jm-submit { background: var(--jm-ink); }
+    .jm-match-callout { align-items: center; gap: 12px; border-radius: 12px; padding: 12px; margin-top: 16px; background: var(--jm-surface); }
+    .jm-spark { width: 40px; height: 40px; background: #ffbe3b; border-radius: 10px; display: grid; place-items: center; flex: none; }
+    .jm-match-callout strong { font-size: 13px; }
+    .jm-match-callout p { margin: 0; font-size: 12px; color: var(--jm-muted); }
+    .jm-sso-options button { justify-content: flex-start; min-height: 44px; font-size: 13px; }
+    .jm-register { margin: 22px 0; font-size: 13px; }
+    .jm-campus-card { align-items: center; gap: 12px; border-radius: 12px; padding: 16px; background: #e9ecff; margin-bottom: 24px; }
+    .jm-campus-image { width: 44px; height: 44px; flex: none; object-fit: cover; border-radius: 8px; }
+    .jm-campus-card strong { font-size: 13px; font-weight: 600; }
+    .jm-campus-card p { color: var(--jm-muted); font-size: 12px; line-height: 18px; margin: 0; }
+    .jm-trust-row { padding: 12px 8px; }
+    .jm-trust-row > div + div { border-left: 1px solid #e2e7ff; }
+}
