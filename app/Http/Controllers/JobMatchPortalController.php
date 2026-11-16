@@ -259,6 +259,14 @@ class JobMatchPortalController extends Controller
 
     private function jobData(Request $request): array
     {
+        $deadlineRules = ['required', 'date'];
+
+        // Closing an existing posting preserves its historical deadline.
+        // New or active postings must still have a current/future deadline.
+        if ($request->boolean('is_active') || ! $request->route('job')) {
+            $deadlineRules[] = 'after_or_equal:today';
+        }
+
         return $request->validate([
             'title' => 'required|string|max:100',
             'description' => 'required|string|max:20000',
@@ -269,7 +277,7 @@ class JobMatchPortalController extends Controller
             'max_salary' => 'required|numeric|gte:min_salary|max:9999999.99',
             'location' => 'required|string|max:100',
             'employment_type' => 'required|in:full_time,part_time,internship,contract,freelance',
-            'deadline' => 'required|date|after_or_equal:today',
+            'deadline' => $deadlineRules,
             'is_active' => 'required|boolean',
         ]);
     }
