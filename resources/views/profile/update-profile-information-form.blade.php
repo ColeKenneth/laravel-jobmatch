@@ -28,7 +28,7 @@
 
                 <!-- Current Profile Photo -->
                 <div class="mt-2" x-show="! photoPreview">
-                    <img src="{{ $this->user->profile_photo_url }}" alt="{{ $this->user->name }}" class="rounded-full size-20 object-cover">
+                    <img src="{{ $this->user->profile_photo_url }}" alt="{{ $this->user->full_name }}" class="rounded-full size-20 object-cover">
                 </div>
 
                 <!-- New Profile Photo Preview -->
@@ -52,11 +52,23 @@
             </div>
         @endif
 
-        <!-- Name -->
+        <!-- Split name fields match the users table and Fortify validation. -->
         <div class="col-span-6 sm:col-span-4">
-            <x-label for="name" value="{{ __('Name') }}" />
-            <x-input id="name" type="text" class="mt-1 block w-full" wire:model="state.name" required autocomplete="name" />
-            <x-input-error for="name" class="mt-2" />
+            <x-label for="first_name" value="{{ __('First name') }}" />
+            <x-input id="first_name" type="text" class="mt-1 block w-full" wire:model="state.first_name" required maxlength="100" autocomplete="given-name" />
+            <x-input-error for="first_name" class="mt-2" />
+        </div>
+
+        <div class="col-span-6 sm:col-span-4">
+            <x-label for="middle_name" value="{{ __('Middle name (optional)') }}" />
+            <x-input id="middle_name" type="text" class="mt-1 block w-full" wire:model="state.middle_name" maxlength="100" autocomplete="additional-name" />
+            <x-input-error for="middle_name" class="mt-2" />
+        </div>
+
+        <div class="col-span-6 sm:col-span-4">
+            <x-label for="last_name" value="{{ __('Last name') }}" />
+            <x-input id="last_name" type="text" class="mt-1 block w-full" wire:model="state.last_name" required maxlength="100" autocomplete="family-name" />
+            <x-input-error for="last_name" class="mt-2" />
         </div>
 
         <!-- Email -->

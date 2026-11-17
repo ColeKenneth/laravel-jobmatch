@@ -17,17 +17,18 @@ class Employer extends Model
         'industry',
         'website',
         'company_description',
-        'logo_url'
+        'location',
+        'company_size',
+        'logo_url',
     ];
 
-    public function user() : BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function jobPostings() : HasMany
+    public function jobPostings(): HasMany
     {
         return $this->hasMany(JobPosting::class);
     }
-
 }

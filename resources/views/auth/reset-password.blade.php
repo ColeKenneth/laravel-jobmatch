@@ -1,36 +1,27 @@
-<x-guest-layout>
-    <x-authentication-card>
-        <x-slot name="logo">
-            <x-authentication-card-logo />
-        </x-slot>
-
-        <x-validation-errors class="mb-4" />
-
-        <form method="POST" action="{{ route('password.update') }}">
-            @csrf
-
-            <input type="hidden" name="token" value="{{ $request->route('token') }}">
-
-            <div class="block">
-                <x-label for="email" value="{{ __('Email') }}" />
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $request->email)" required autofocus autocomplete="username" />
-            </div>
-
-            <div class="mt-4">
-                <x-label for="password" value="{{ __('Password') }}" />
-                <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
-            </div>
-
-            <div class="mt-4">
-                <x-label for="password_confirmation" value="{{ __('Confirm Password') }}" />
-                <x-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required autocomplete="new-password" />
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <x-button>
-                    {{ __('Reset Password') }}
-                </x-button>
-            </div>
-        </form>
-    </x-authentication-card>
-</x-guest-layout>
+<x-jobmatch-layout title="Reset Password">
+    <section class="campus-split">
+        <div class="campus-photo" role="img" aria-label="World Citi Colleges campus"></div>
+        <div class="campus-content auth-content">
+            <section class="card auth-card">
+                <h1>Reset Your Password</h1>
+                <form class="auth-form" method="POST" action="{{ route('password.update') }}">
+                    @csrf
+                    <input type="hidden" name="token" value="{{ $request->route('token') }}">
+                    <label>
+                        Email
+                        <input name="email" type="email" value="{{ old('email',$request->email) }}" required autocomplete="email">
+                    </label>
+                    <label>
+                        New password
+                        <input name="password" type="password" required autocomplete="new-password">
+                    </label>
+                    <label>
+                        Confirm password
+                        <input name="password_confirmation" type="password" required autocomplete="new-password">
+                    </label>
+                    <button class="button stretch">Reset Password</button>
+                </form>
+            </section>
+        </div>
+    </section>
+</x-jobmatch-layout>

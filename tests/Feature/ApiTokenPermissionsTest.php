@@ -5,6 +5,9 @@ use Illuminate\Support\Str;
 use Laravel\Jetstream\Features;
 use Laravel\Jetstream\Http\Livewire\ApiTokenManager;
 use Livewire\Livewire;
+use Tests\WithOptionalFeatures;
+
+pest()->use(WithOptionalFeatures::class);
 
 test('api token permissions can be updated', function () {
     if (Features::hasTeamFeatures()) {
@@ -33,6 +36,4 @@ test('api token permissions can be updated', function () {
         ->can('delete')->toBeTrue()
         ->can('read')->toBeFalse()
         ->can('missing-permission')->toBeFalse();
-})->skip(function () {
-    return ! Features::hasApiFeatures();
-}, 'API support is not enabled.');
+});

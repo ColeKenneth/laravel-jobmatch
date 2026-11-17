@@ -1,0 +1,33 @@
+/* Shared Figma review surface. Original Figma node IDs remain in the Blade markup. */
+.jm-review-bar { position: relative; z-index: 100; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; padding: 12px 24px; background: #0b2545; color: white; font: 12px/1.5 'Plus Jakarta Sans', sans-serif; }
+.jm-review-bar strong { color: #ffbe3b; letter-spacing: .06em; }
+.jm-review-bar a { text-decoration: underline; text-underline-offset: 3px; }
+.jm-review-bar span { opacity: .75; }
+.jm-preview-notice { position: fixed; z-index: 110; bottom: 20px; left: 20px; right: 20px; padding: 16px 24px; border: 1px solid #ffbe3b; border-radius: 12px; box-shadow: 0 8px 24px #0b254526; background: #fff8e7; color: #0b2545; font: 14px/1.5 'Plus Jakarta Sans', sans-serif; }
+.jm-figma-preview { min-height: 100vh; font-family: 'Plus Jakarta Sans', sans-serif; isolation: isolate; }
+.jm-figma-preview [class*="max-w-[1280px]"] { margin-inline: auto; }
+.jm-figma-preview > [data-name="Main"] { width: 100%; }
+.jm-figma-preview .jm-preview-header { position: absolute; top: 0; left: 0; right: 0; z-index: 20; }
+.jm-figma-preview button { text-align: inherit; }
+.jm-figma-preview button:focus-visible, .jm-figma-preview a:focus-visible, .jm-preview-input:focus-visible { outline: 3px solid #b28112; outline-offset: 3px; }
+.jm-preview-input { font: inherit; color: #131b2e; border: 1px solid transparent; min-height: 42px; }
+.jm-figma-preview [data-name^="Section -"] { scroll-margin-top: 96px; }
+@media(max-width: 767px) {
+    .jm-review-bar { gap: 8px 12px; padding: 12px 16px; }
+    .jm-review-bar span { flex-basis: 100%; }
+    .jm-figma-preview { overflow-x: clip; }
+    .jm-figma-preview [class*="grid-cols-"] { grid-template-columns: minmax(0, 1fr); }
+    .jm-figma-preview [class*="col-"] { grid-column: auto; }
+    .jm-figma-preview [data-name^="Section -"] { padding-inline: 16px; }
+    .jm-figma-preview [class*="max-w-[1280px]"] { padding-inline: 16px; max-width: 100%; }
+    .jm-figma-preview [data-name="Nav"] { flex-wrap: wrap; gap: 8px; }
+    .jm-figma-preview .jm-preview-header { position: relative; order: -1; height: auto; }
+    .jm-figma-preview .jm-preview-header > div { height: auto; flex-wrap: wrap; gap: 16px; padding: 16px; }
+    .jm-figma-preview > [data-name="Main"] { padding-top: 0; }
+    .jm-figma-preview [data-name="Footer"] > div { flex-wrap: wrap; height: auto; gap: 24px; }
+    .jm-figma-preview [data-name="Footer"] [class*="w-["] { max-width: 100%; }
+    .jm-figma-preview [data-name="Section - LEFT 68%: Comprehensive Job Dossier (8 cols on lg)"] { width: 100%; }
+    .jm-figma-preview [class*="whitespace-nowrap"] { white-space: normal; }
+    .jm-figma-preview [class*="whitespace-nowrap"] p { overflow-wrap: anywhere; }
+    .jm-figma-preview [data-name="Main"] > [data-name="Container"] { width: 100%; }
+}

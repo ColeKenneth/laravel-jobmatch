@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enum\EmploymentType;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -30,7 +31,7 @@ class JobPosting extends Model
     ];
 
     #[Override]
-    protected function casts() : array
+    protected function casts(): array
     {
         return [
             'min_salary' => 'decimal:2',
@@ -38,21 +39,34 @@ class JobPosting extends Model
             'employment_type' => EmploymentType::class,
             'posted_date' => 'datetime',
             'deadline' => 'datetime',
-            'is_active' => 'boolean'
+            'is_active' => 'boolean',
         ];
     }
 
-    public function employer() : BelongsTo
+    /**
+     * Keep public directories and portal opportunity cards on the same visibility rule.
+     */
+    public function scopeOpenForDirectory(Builder $query): Builder
+    {
+        return $query
+            ->where('is_active', true)
+            ->whereHas('employer.user', fn (Builder $user) => $user->where('is_active', true))
+            ->where(fn (Builder $deadline) => $deadline
+                ->whereNull('deadline')
+                ->orWhere('deadline', '>=', now()->startOfDay()));
+    }
+
+    public function employer(): BelongsTo
     {
         return $this->belongsTo(Employer::class);
     }
 
-    public function requiredSkills() : HasMany
+    public function requiredSkills(): HasMany
     {
         return $this->hasMany(JobSkill::class);
     }
 
-    public function placementRecords() : HasMany
+    public function placementRecords(): HasMany
     {
         return $this->hasMany(PlacementRecord::class);
     }

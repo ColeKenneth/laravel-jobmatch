@@ -1,34 +1,23 @@
-<x-guest-layout>
-    <x-authentication-card>
-        <x-slot name="logo">
-            <x-authentication-card-logo />
-        </x-slot>
-
-        <div class="mb-4 text-sm text-gray-600">
-            {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
+<x-jobmatch-layout title="Password Recovery">
+    <section class="campus-split">
+        <div class="campus-photo" role="img" aria-label="World Citi Colleges campus"></div>
+        <div class="campus-content auth-content">
+            <section class="card auth-card">
+                <span class="auth-school-icon">
+                    <x-jobmatch-icon name="school"/>
+                </span>
+                <h1>WCC JobMatchAI · Password Recovery</h1>
+                <p>Enter your registered email to receive a password reset link.</p>
+                <form class="auth-form" method="POST" action="{{ route('password.email') }}">
+                    @csrf
+                    <label>
+                        Email address
+                        <input type="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="email">
+                    </label>
+                    <button class="button stretch">Send Reset Link</button>
+                </form>
+                <a href="{{ route('login') }}">Back to Login</a>
+            </section>
         </div>
-
-        @session('status')
-            <div class="mb-4 font-medium text-sm text-green-600">
-                {{ $value }}
-            </div>
-        @endsession
-
-        <x-validation-errors class="mb-4" />
-
-        <form method="POST" action="{{ route('password.email') }}">
-            @csrf
-
-            <div class="block">
-                <x-label for="email" value="{{ __('Email') }}" />
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <x-button>
-                    {{ __('Email Password Reset Link') }}
-                </x-button>
-            </div>
-        </form>
-    </x-authentication-card>
-</x-guest-layout>
+    </section>
+</x-jobmatch-layout>

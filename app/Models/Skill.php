@@ -17,23 +17,25 @@ class Skill extends Model
         'category',
         'ontology_id',
         'description',
-        'icon_url'
+        'discipline',
+        'source',
+        'icon_url',
     ];
 
     #[Override]
-    protected function casts() : array
+    protected function casts(): array
     {
         return [
-            'category' => Category::class
+            'category' => Category::class,
         ];
     }
 
-    public function jobSkills() : HasMany
+    public function jobSkills(): HasMany
     {
         return $this->hasMany(JobSkill::class);
     }
 
-    public function studentSkills() : HasMany
+    public function studentSkills(): HasMany
     {
         return $this->hasMany(StudentSkill::class);
     }

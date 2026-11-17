@@ -5,6 +5,9 @@ use Illuminate\Support\Str;
 use Laravel\Jetstream\Features;
 use Laravel\Jetstream\Http\Livewire\ApiTokenManager;
 use Livewire\Livewire;
+use Tests\WithOptionalFeatures;
+
+pest()->use(WithOptionalFeatures::class);
 
 test('api tokens can be deleted', function () {
     if (Features::hasTeamFeatures()) {
@@ -24,6 +27,4 @@ test('api tokens can be deleted', function () {
         ->call('deleteApiToken');
 
     expect($user->fresh()->tokens)->toHaveCount(0);
-})->skip(function () {
-    return ! Features::hasApiFeatures();
-}, 'API support is not enabled.');
+});

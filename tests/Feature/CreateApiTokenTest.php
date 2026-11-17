@@ -4,6 +4,9 @@ use App\Models\User;
 use Laravel\Jetstream\Features;
 use Laravel\Jetstream\Http\Livewire\ApiTokenManager;
 use Livewire\Livewire;
+use Tests\WithOptionalFeatures;
+
+pest()->use(WithOptionalFeatures::class);
 
 test('api tokens can be created', function () {
     if (Features::hasTeamFeatures()) {
@@ -27,6 +30,4 @@ test('api tokens can be created', function () {
         ->name->toEqual('Test Token')
         ->can('read')->toBeTrue()
         ->can('delete')->toBeFalse();
-})->skip(function () {
-    return ! Features::hasApiFeatures();
-}, 'API support is not enabled.');
+});

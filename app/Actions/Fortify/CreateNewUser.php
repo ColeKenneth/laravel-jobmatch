@@ -30,7 +30,6 @@ class CreateNewUser implements CreatesNewUsers
                 UserRole::STUDENT->value,
                 UserRole::ALUMNI->value,
                 UserRole::EMPLOYER->value,
-                UserRole::PLACEMENT_OFFICER->value
             ])],
             'password' => $this->passwordRules(),
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
